@@ -1,5 +1,5 @@
-Archive/Videos/*
-Archive/Kaggle_Dataset/20*
+Archive/*/*/*.csv
+Archive/*/*/*.json
 kaggle.json
 __pycache__
 *.exe

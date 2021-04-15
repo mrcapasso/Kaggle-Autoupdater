@@ -4,14 +4,6 @@
 import kaggle, os, re, requests
     #pip install kaggle
 
-def kaggleTokenExistence(mainStorageDrive: str='C:\\') -> bool: 
-    normalAPILocation = os.path.join(mainStorageDrive, 'Users', os.getlogin(), '.kaggle')
-    kaggleToken = r'kaggle.json'
-    if os.path.exists(os.path.join(normalAPILocation, kaggleToken)):
-        return True
-    else:
-        return False
-    
 def kaggleDownloadCmd(dataset, downloadPath, fileName: str=None, unzip: bool=False, force: bool=False, quiet: bool=False) -> str:
     #Reference URL: https://github.com/Kaggle/kaggle-api#download-dataset-files
     #Note, unzip feature conflicts with kaggle redundant file checking.
@@ -96,4 +88,4 @@ def kaggleRecentVersionDate(dataOwner: str='rsrishav', dataName: str='youtube-tr
     return recentDate
 
 if __name__ == '__main__':
-    print(kaggleTokenExistence())
+    pass

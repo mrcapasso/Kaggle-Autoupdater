@@ -1,5 +1,4 @@
-Archive/*/*/*.csv
-Archive/*/*/*.json
+Archive/*/*
 kaggle.json
 __pycache__
 *.exe

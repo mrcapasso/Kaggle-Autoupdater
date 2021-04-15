@@ -2,16 +2,16 @@ import os, logging, time, csv
     #Logging Docs: https://docs.python.org/3/library/logging.html
     #CSV Docs: https://docs.python.org/3/library/csv.html
     #Time Docs: https://docs.python.org/3/library/time.html
-from kaggle_API import kaggleTokenExistence, kaggleDownloadCmd, kaggleListsCmd, kaggleRecentVersionNum, kaggleRecentVersionDate
+from kaggle_API import kaggleDownloadCmd, kaggleListsCmd, kaggleRecentVersionNum, kaggleRecentVersionDate
 
 #ToDo:
-    
+    #Refactor for kaggle general solution, use dictionaries based on metadata for version control. 
     #Add logging.
     #Consider kaggle envi variables, see kaggle docs for info.
     #Add timeout to kaggle_API requests
     
 def main():
-    KAGGLE_DATASETS_LOCATION = r'Archive/Kaggle_Dataset'
+    KAGGLE_DATASETS_LOCATION = r'Archive\youtube-trending-video-dataset'
     KAGGLE_SRC_NAME = r'rsrishav/youtube-trending-video-dataset'
     KAGGLE_REMOVE_JSON = True
 

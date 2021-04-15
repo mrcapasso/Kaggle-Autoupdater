@@ -1,0 +1,4 @@
+Trending Video Dataset Source Information
+Author: Rishav Sharma
+License: CC0, Public Domain
+Link: https://www.kaggle.com/rsrishav/youtube-trending-video-dataset

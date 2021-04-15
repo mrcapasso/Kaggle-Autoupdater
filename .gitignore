@@ -1,0 +1,11 @@
+Archive/Videos/*
+Archive/Kaggle_Dataset/20*
+kaggle.json
+__pycache__
+*.exe
+*.o
+*.so
+*.7z
+*.tar
+*.zip
+*.mp*

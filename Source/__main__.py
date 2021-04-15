@@ -5,7 +5,8 @@ import os, logging, time, csv
 from kaggle_API import kaggleDownloadCmd, kaggleListsCmd, kaggleRecentVersionNum, kaggleRecentVersionDate
 
 #ToDo:
-    #Refactor for kaggle general solution, use dictionaries based on metadata for version control. 
+    #Refactor for kaggle general solution: use dictionaries based on metadata for version control. 
+    #Check kaggle metadata commands, broken at time of this message.
     #Add logging.
     #Consider kaggle envi variables, see kaggle docs for info.
     #Add timeout to kaggle_API requests

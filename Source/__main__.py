@@ -5,6 +5,10 @@ import os, logging, time, csv
 from kaggle_API import kaggleDownloadCmd, kaggleListsCmd, kaggleRecentVersionNum, kaggleRecentVersionDate
 
 #ToDo:
+    ##CHECK PANDAS, MAY SAVE A LOT OF HASSLE.
+        #https://github.com/pandas-dev/pandas#main-features
+    ##CHECK CYTHON
+        #https://cython.org/
     #Refactor for kaggle general solution: use dictionaries based on metadata for version control. 
     #Check kaggle metadata commands, broken at time of this message.
     #Add logging.

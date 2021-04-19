@@ -1,0 +1,16 @@
+Note:
+    ##CHECK PANDAS, MAY SAVE A LOT OF HASSLE.
+        #https://github.com/pandas-dev/pandas#main-features
+    ##CHECK CYTHON
+        #https://cython.org/
+
+Critical:
+
+
+Reccomended:
+    #Add proper documentation 
+    #Refactor for kaggle general datasets: use dictionaries based on metadata for version control. 
+    #Check kaggle metadata commands, broken at time of this message.
+    #Add logging.
+    #Consider kaggle envi variables, see kaggle docs for info.
+    #Add timeout to kaggle_API requests

@@ -3,17 +3,6 @@ import os, logging, time, csv
     #CSV Docs: https://docs.python.org/3/library/csv.html
     #Time Docs: https://docs.python.org/3/library/time.html
 from kaggle_API import kaggleDownloadCmd, kaggleListsCmd, kaggleRecentVersionNum, kaggleRecentVersionDate
-
-#ToDo:
-    ##CHECK PANDAS, MAY SAVE A LOT OF HASSLE.
-        #https://github.com/pandas-dev/pandas#main-features
-    ##CHECK CYTHON
-        #https://cython.org/
-    #Refactor for kaggle general solution: use dictionaries based on metadata for version control. 
-    #Check kaggle metadata commands, broken at time of this message.
-    #Add logging.
-    #Consider kaggle envi variables, see kaggle docs for info.
-    #Add timeout to kaggle_API requests
     
 def main():
     KAGGLE_DATASETS_LOCATION = r'Archive\youtube-trending-video-dataset'

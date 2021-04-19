@@ -8,7 +8,8 @@ Critical:
 
 
 Reccomended:
-    #Add proper documentation 
+    #Add proper documentation general
+    #Add kaggle api documentation for module
     #Refactor for kaggle general datasets: use dictionaries based on metadata for version control. 
     #Check kaggle metadata commands, broken at time of this message.
     #Add logging.

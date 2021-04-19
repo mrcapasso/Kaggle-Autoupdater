@@ -4,23 +4,27 @@ import os, logging, time, csv
     #Time Docs: https://docs.python.org/3/library/time.html
 from kaggle_API import kaggleDownloadCmd, kaggleListsCmd, kaggleRecentVersionNum, kaggleRecentVersionDate
 
-#Main Refactor ToDo: 
+#Read More at: https://docs.python.org/3/tutorial/classes.html#inheritance
+#Research: https://docs.python.org/3/tutorial/modules.html#packages
 
-class kaggleDataset(datasetName):
+class kaggleMetadadata:
     #Classes Example: https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html
     #Classes Docs: https://docs.python.org/3/tutorial/classes.html
+    #Kaggle Metadata Ex: https://www.kaggle.com/rashikrahmanpritom/heart-attack-analysis-prediction-dataset/metadata
 
-    def datasetMetadata():
-        #https://www.kaggle.com/rashikrahmanpritom/heart-attack-analysis-prediction-dataset/metadata
-        #Author
-        #License
-        #Update Frequency
-        #Date Created
-        #Last Online Update
-        #Last Offline Update
-        #Current Online Version
-        #Current Offline Version
-
+    def __init__(self,author,license,updateFrequency,dateCreated,lastOnlineUpdate,lastOfflineUpdate,currentOnlineVersion,currentOfflineVersion): 
+        #__init__ is a constructor for new object creation specific to class
+        #self is used to show variables belong to this class
+        #instaces are like states for a group (e.g. water is LIQUId, water is SOLID)
+        self.author = author
+        self.license = license
+        self.updateFrequency = updateFrequency
+        self.dateCreated = dateCreated
+        self.lastOnlineUpdate = lastOnlineUpdate
+        self.lastOfflineUpdate = lastOfflineUpdate
+        self.currentOnlineVersion = currentOnlineVersion
+        self.currentOfflineVersion = currentOfflineVersion
+    
 def main():
     KAGGLE_DATASETS_LOCATION = r'Archive\youtube-trending-video-dataset'
     KAGGLE_SRC_NAME = r'rsrishav/youtube-trending-video-dataset'

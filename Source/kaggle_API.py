@@ -61,7 +61,7 @@ def kaggleListsCmd(search: str, tags: list, sortBy=' ', fileSize=' ', fileType='
     )
     return command    
 
-def kaggleRecentVersionNum(dataOwner: str='rsrishav', dataName: str='youtube-trending-video-dataset', proxy:dict='') -> int:
+def kaggleRecentVersionNum(dataOwner: str, dataName: str, proxy:dict='') -> int:
     #This method is intended to be temporary until the Kaggle metadata API retrival bug is fixed.
     metadataURL = r'https://www.kaggle.com/' + dataOwner + r'/' + dataName + r'/metadata'
     headers = {"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"}
@@ -70,7 +70,7 @@ def kaggleRecentVersionNum(dataOwner: str='rsrishav', dataName: str='youtube-tre
     versionList = versionRegex.findall(pageRequest.text)
     return max(set(versionList))
 
-def kaggleRecentVersionDate(dataOwner: str='rsrishav', dataName: str='youtube-trending-video-dataset', proxy:dict='') -> str:
+def kaggleRecentVersionDate(dataOwner: str, dataName: str, proxy:dict='') -> str:
     #This method is intended to be temporary until the Kaggle metadata API retrival bug is fixed.
     #This function assumes the most recent date posted on metadata is the version's last update date.
     metadataURL = r'https://www.kaggle.com/' + dataOwner + r'/' + dataName + r'/metadata'

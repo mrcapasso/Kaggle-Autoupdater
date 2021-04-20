@@ -4,9 +4,38 @@ import os, logging, time, csv
     #Time Docs: https://docs.python.org/3/library/time.html
 from kaggle_API import kaggleDownloadCmd, kaggleListsCmd, kaggleRecentVersionNum, kaggleRecentVersionDate
 
-#Read More at: https://docs.python.org/3/tutorial/classes.html#inheritance
-#Research: https://docs.python.org/3/tutorial/modules.html#packages
+############################(Configurations - Start)############################
+KAGGLE_DATASETS_URL_LIST =[ #Please ensure your URL list matches the same formatting.
+        'https://www.kaggle.com/rashikrahmanpritom/heart-attack-analysis-prediction-dataset',
+        'https://www.kaggle.com/ajaypalsinghlo/world-happiness-report-2021',
+        'https://www.kaggle.com/iabhishekofficial/mobile-price-classification',
+        'https://www.kaggle.com/gpreda/reddit-vaccine-myths'
+        ]
+KAGGLE_DATASETS_LOCATION = r'Archive'
+KAGGLE_SRC_NAME = r'rsrishav/youtube-trending-video-dataset'
+KAGGLE_REMOVE_JSON = True
+#############################(Configurations - End)#############################
 
+def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle URL. 
+    datasetName = []
+    datasetAuthor = []
+    #Recall URL is formatted as: www.kaggle.com/<datasetAuthor>/<datasetName>
+    for i in reversed(url):
+        if i != r'/':
+            datasetName.append(i)
+        else:
+            datasetNameString = ''.join(datasetName[::-1])
+            reducedURL = url.replace(r'/' + datasetNameString, '')
+            break
+    for j in reversed(reducedURL):
+        if j != r'/':
+            datasetAuthor.append(j)
+        else:
+            datasetAuthorString = ''.join(datasetAuthor[::-1])
+            break
+
+    return datasetNameString, datasetAuthorString
+        
 class kaggleMetadadata:
     #Classes Example: https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html
     #Classes Docs: https://docs.python.org/3/tutorial/classes.html
@@ -24,11 +53,15 @@ class kaggleMetadadata:
         self.lastOfflineUpdate = lastOfflineUpdate
         self.currentOnlineVersion = currentOnlineVersion
         self.currentOfflineVersion = currentOfflineVersion
-    
+   
 def main():
-    KAGGLE_DATASETS_LOCATION = r'Archive\youtube-trending-video-dataset'
-    KAGGLE_SRC_NAME = r'rsrishav/youtube-trending-video-dataset'
-    KAGGLE_REMOVE_JSON = True
+
+    #Converting config URL list to convenient datastructure.
+    trackedDatasets = []
+    for i in KAGGLE_DATASETS_URL_LIST:
+        trackedDatasets.append(extractURLData(i))
+    print(trackedDatasets)
+    os.system('pause')
 
 ######################(CSV Version Control / Auto-Updater)######################
     #Note: Date naming convention is YYYY-MM-DD
@@ -51,17 +84,6 @@ def main():
             for file in extractedFiles:
                 if file[-5:] == r'.json':
                    os.unlink(os.path.join(newDateFolderPath, file)) 
-
-########################(Dataset Parallelism Preparation)#######################
-    #CSV Docs:
-        #Module Contents: https://docs.python.org/3/library/csv.html#module-contents
-        #Reader Objects: https://docs.python.org/3/library/csv.html#reader-objects
-        #Writer Objects: https://docs.python.org/3/library/csv.html#writer-objects
-        #Line by Line demo: https://docs.python.org/3/library/csv.html#id3
-        #Cons: No append feature, no native parallelism, line by line only.
-        #Pros: csv to dictionaries, popular
-        
-    #CSV? or RegEx for more general solution? 
 
 if __name__ == '__main__':
     main()

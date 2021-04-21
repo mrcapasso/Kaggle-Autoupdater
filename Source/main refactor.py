@@ -5,7 +5,7 @@ import os, logging, time, csv
 from kaggle_API import kaggleDownloadCmd, kaggleRecentVersionDate
 
 ############################(Configurations - Start)############################
-global KAGGLE_DATASETS_URL_LIST, KAGGLE_DATASETS_LOCATION, KAGGLE_REMOVE_JSON
+global KAGGLE_DATASETS_URL_LIST
 KAGGLE_DATASETS_URL_LIST = [ #Please ensure your URL list matches the same formatting.
         'https://www.kaggle.com/rashikrahmanpritom/heart-attack-analysis-prediction-dataset',
         'https://www.kaggle.com/ajaypalsinghlo/world-happiness-report-2021',
@@ -66,6 +66,7 @@ def main():
 
 ######################(CSV Version Control / Auto-Updater)######################
 #Note: Date naming convention is YYYY-MM-DD
+    KAGGLE_SRC_NAME = KAGGLE_DATASETS_LOCATION = ''
     for datasetName, datasetAuthor in trackedDatasets:        
         time.sleep(5) #Prevent API spam.
         kaggleSourceName = os.path.join(datasetAuthor,datasetName)
@@ -77,19 +78,17 @@ def main():
         try:
             kaggleOnlineVersion = kaggleRecentVersionDate(datasetAuthor,datasetName)
         except:
-            print('Failed to update: ' + datasetName + ' from ' + datasetAuthor)
-            time.sleep(15)
             pass #! Log failure here.
         kaggleOfflineVersion = -1
         try: #Checking for existence of previous install
-            if len(os.listdir(individualDatasetLocation)) != 0:
-                kaggleOfflineVersion = max(set(os.listdir(individualDatasetLocation)))
+            if len(os.listdir(KAGGLE_DATASETS_LOCATION)) != 0:
+                kaggleOfflineVersion = max(set(os.listdir(KAGGLE_DATASETS_LOCATION)))
         except:
             pass
         if kaggleOnlineVersion != kaggleOfflineVersion:
-            newDateFolderPath = os.path.join(individualDatasetLocation, kaggleOnlineVersion)
+            newDateFolderPath = os.path.join(KAGGLE_DATASETS_LOCATION, kaggleOnlineVersion)
             os.makedirs(newDateFolderPath)
-            os.system(kaggleDownloadCmd(kaggleSourceName, newDateFolderPath, unzip=True))
+            os.system(kaggleDownloadCmd(KAGGLE_SRC_NAME, newDateFolderPath, unzip=True))
             if KAGGLE_REMOVE_JSON == True:
                 extractedFiles = os.listdir(newDateFolderPath)
                 for file in extractedFiles:
@@ -97,5 +96,4 @@ def main():
                         os.unlink(os.path.join(newDateFolderPath, file)) 
 
 if __name__ == '__main__':
-    os.system('cls')
     main()

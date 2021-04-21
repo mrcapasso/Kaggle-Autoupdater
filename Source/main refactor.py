@@ -2,7 +2,7 @@ import os, logging, time, csv
     #Logging Docs: https://docs.python.org/3/library/logging.html
     #CSV Docs: https://docs.python.org/3/library/csv.html
     #Time Docs: https://docs.python.org/3/library/time.html
-from kaggle_API import kaggleDownloadCmd, kaggleListsCmd, kaggleRecentVersionNum, kaggleRecentVersionDate
+from kaggle_API import kaggleDownloadCmd, kaggleRecentVersionDate
 
 ############################(Configurations - Start)############################
 global KAGGLE_DATASETS_URL_LIST, KAGGLE_DATASETS_LOCATION, KAGGLE_REMOVE_JSON
@@ -13,7 +13,7 @@ KAGGLE_DATASETS_URL_LIST = [ #Please ensure your URL list matches the same forma
         'https://www.kaggle.com/gpreda/reddit-vaccine-myths'
         ]
 KAGGLE_DATASETS_LOCATION = r'Archive' #Default is relative file path to working directory.
-KAGGLE_REMOVE_JSON = True
+KAGGLE_REMOVE_JSON = False
 #############################(Configurations - End)#############################
 
 def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle URL. 
@@ -55,7 +55,10 @@ class kaggleMetadadata:
         self.currentOfflineVersion = currentOfflineVersion
    
 def main():
-        
+
+#!!!!!!!!!!TODO: Fix CLI for kaggle API stuff, likely caused be \ or /
+
+
     #Converting config URL list to convenient datastructure.
     trackedDatasets = []
     for i in KAGGLE_DATASETS_URL_LIST:
@@ -65,10 +68,12 @@ def main():
 #Note: Date naming convention is YYYY-MM-DD
     for datasetName, datasetAuthor in trackedDatasets:        
         time.sleep(5) #Prevent API spam.
-        print(datasetName)
         kaggleSourceName = os.path.join(datasetAuthor,datasetName)
+        print('kaggleSourceName: ' + kaggleSourceName)
         individualDatasetLocation = os.path.join(KAGGLE_DATASETS_LOCATION,datasetName)
-        
+        print('Individual dataset location: ' + individualDatasetLocation)
+        os.system('pause')
+
         try:
             kaggleOnlineVersion = kaggleRecentVersionDate(datasetAuthor,datasetName)
         except:

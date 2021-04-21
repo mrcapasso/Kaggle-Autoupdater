@@ -5,15 +5,14 @@ import os, logging, time, csv
 from kaggle_API import kaggleDownloadCmd, kaggleListsCmd, kaggleRecentVersionNum, kaggleRecentVersionDate
 
 ############################(Configurations - Start)############################
-global KAGGLE_DATASETS_URL_LIST
+global KAGGLE_DATASETS_URL_LIST, KAGGLE_DATASETS_LOCATION, KAGGLE_REMOVE_JSON
 KAGGLE_DATASETS_URL_LIST = [ #Please ensure your URL list matches the same formatting.
         'https://www.kaggle.com/rashikrahmanpritom/heart-attack-analysis-prediction-dataset',
         'https://www.kaggle.com/ajaypalsinghlo/world-happiness-report-2021',
         'https://www.kaggle.com/iabhishekofficial/mobile-price-classification',
         'https://www.kaggle.com/gpreda/reddit-vaccine-myths'
         ]
-KAGGLE_DATASETS_LOCATION = r'Archive'
-KAGGLE_SRC_NAME = r'rsrishav/youtube-trending-video-dataset'
+KAGGLE_DATASETS_LOCATION = r'Archive' #Default is relative file path to working directory.
 KAGGLE_REMOVE_JSON = True
 #############################(Configurations - End)#############################
 
@@ -64,28 +63,28 @@ def main():
 
 ######################(CSV Version Control / Auto-Updater)######################
 #Note: Date naming convention is YYYY-MM-DD
-    KAGGLE_SRC_NAME = KAGGLE_DATASETS_LOCATION = ''
     for datasetName, datasetAuthor in trackedDatasets:        
-        #! Fix these name conventions throughout file.
-        KAGGLE_SRC_NAME = os.path.join(datasetAuthor,datasetName)
-        print(i)
-        os.system('pause')
-        KAGGLE_DATASETS_LOCATION = os.path.join('') #!********** Format this to point to proper dated folder.
+        time.sleep(5) #Prevent API spam.
+        print(datasetName)
+        kaggleSourceName = os.path.join(datasetAuthor,datasetName)
+        individualDatasetLocation = os.path.join(KAGGLE_DATASETS_LOCATION,datasetName)
         
         try:
             kaggleOnlineVersion = kaggleRecentVersionDate(datasetAuthor,datasetName)
         except:
+            print('Failed to update: ' + datasetName + ' from ' + datasetAuthor)
+            time.sleep(15)
             pass #! Log failure here.
         kaggleOfflineVersion = -1
         try: #Checking for existence of previous install
-            if len(os.listdir(KAGGLE_DATASETS_LOCATION)) != 0:
-                kaggleOfflineVersion = max(set(os.listdir(KAGGLE_DATASETS_LOCATION)))
+            if len(os.listdir(individualDatasetLocation)) != 0:
+                kaggleOfflineVersion = max(set(os.listdir(individualDatasetLocation)))
         except:
             pass
         if kaggleOnlineVersion != kaggleOfflineVersion:
-            newDateFolderPath = os.path.join(KAGGLE_DATASETS_LOCATION, kaggleOnlineVersion)
+            newDateFolderPath = os.path.join(individualDatasetLocation, kaggleOnlineVersion)
             os.makedirs(newDateFolderPath)
-            os.system(kaggleDownloadCmd(KAGGLE_SRC_NAME, newDateFolderPath, unzip=True))
+            os.system(kaggleDownloadCmd(kaggleSourceName, newDateFolderPath, unzip=True))
             if KAGGLE_REMOVE_JSON == True:
                 extractedFiles = os.listdir(newDateFolderPath)
                 for file in extractedFiles:
@@ -93,4 +92,5 @@ def main():
                         os.unlink(os.path.join(newDateFolderPath, file)) 
 
 if __name__ == '__main__':
+    os.system('cls')
     main()

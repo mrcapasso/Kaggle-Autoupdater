@@ -7,15 +7,32 @@ from kaggle_API import kaggleDownloadCmd, kaggleRecentVersionDate
 
 ############################(Configurations - Start)############################
 global KAGGLE_DATASETS_URL_LIST, KAGGLE_DATASETS_LOCATION, KAGGLE_REMOVE_JSON
-KAGGLE_DATASETS_URL_LIST = [ #Please ensure your URL list matches the same formatting.
-        'https://www.kaggle.com/rashikrahmanpritom/heart-attack-analysis-prediction-dataset',
-        'https://www.kaggle.com/ajaypalsinghlo/world-happiness-report-2021',
-        'https://www.kaggle.com/iabhishekofficial/mobile-price-classification',
-        'https://www.kaggle.com/gpreda/reddit-vaccine-myths',
-        'https://www.kaggle.com/rsrishav/youtube-trending-video-dataset'
+KAGGLE_DATASETS_URL_LIST = [ 
+        #Desc: These are the datasets you want to auto-download.
+        #Note: Please ensure your URL list matches the same formatting.
+        'https://www.kaggle.com/rsrishav/youtube-trending-video-dataset',
+        'https://www.kaggle.com/gauravduttakiit/covid-19',
+        'https://www.kaggle.com/paultimothymooney/coronavirus-in-italy',
+        'https://www.kaggle.com/gpreda/all-covid19-vaccines-tweets',
+        'https://www.kaggle.com/gpreda/pfizer-vaccine-on-reddit',
+        'https://www.kaggle.com/shivamb/netflix-shows',
+        'https://www.kaggle.com/gpreda/reddit-wallstreetsbets-posts',
+        'https://www.kaggle.com/shivkumarganesh/politifact-factcheck-data',
+        'https://www.kaggle.com/aaron7sun/stocknews',
+        'https://www.kaggle.com/jealousleopard/goodreadsbooks',
+        'https://www.kaggle.com/dhruvildave/wikibooks-dataset',
+        #'https://www.kaggle.com/imsparsh/musicnet-dataset',
+        'https://www.kaggle.com/datasnaek/chess',
+        'https://www.kaggle.com/shivamb/netflix-shows',
+        'https://www.kaggle.com/unsdsn/world-happiness',
+        'https://www.kaggle.com/arashnic/hr-analytics-job-change-of-data-scientists',
+        'https://www.kaggle.com/tencars/392-crypto-currency-pairs-at-minute-resolution',
+        'https://www.kaggle.com/antgoldbloom/covid19-data-from-john-hopkins-university',
+        'https://www.kaggle.com/new-york-state/nys-currently-licensed-real-estate-appraisers',
+        'https://www.kaggle.com/new-york-state/nys-city-of-albany-building-permits-issued',
+        'https://www.kaggle.com/sobhanmoosavi/us-accidents'
         ]
 KAGGLE_DATASETS_LOCATION = r'Archive' #Relative file path to working directory.
-KAGGLE_REMOVE_JSON = False
 #############################(Configurations - End)#############################
 
 def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle URL. 
@@ -39,8 +56,12 @@ def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle
         
 ##ToDo:
 # kaggle authenticaion validation & common folder
+# Add logging
 # check to see if download interrupted, check for it based off .zip
 # warning if last update was some time ago
+# re-organize default list to sort by smallest file size
+# print start and finish times & filesize
+# check if works on linux
    
 def main():
     #Converting config's URL list to convenient datastructure.
@@ -53,7 +74,6 @@ def main():
     for datasetName, datasetAuthor in trackedDatasets:        
         individualDatasetLocation = os.path.join(KAGGLE_DATASETS_LOCATION,datasetName)
         #! Mark process start here
-        print('Individual dataset location: ' + individualDatasetLocation)#temp
 
         try: #Checking online version's latest date.
             kaggleOnlineVersion = kaggleRecentVersionDate(datasetAuthor,datasetName)
@@ -74,7 +94,7 @@ def main():
             newDateFolderPath = os.path.join(individualDatasetLocation, kaggleOnlineVersion)
             os.makedirs(newDateFolderPath)
             kaggleSourceName = datasetAuthor + '/' + datasetName
-            os.system(kaggleDownloadCmd(kaggleSourceName, newDateFolderPath, unzip=True))
+            os.system(kaggleDownloadCmd(kaggleSourceName, newDateFolderPath, unzip=False))
             #Note: kaggle unzipping uses parrallelism/concurrency natively. 
         #! Mark process end here
         time.sleep(5) #Prevent API spam

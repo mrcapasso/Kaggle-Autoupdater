@@ -33,6 +33,8 @@ KAGGLE_DATASETS_URL_LIST = [
         'https://www.kaggle.com/sobhanmoosavi/us-accidents'
         ]
 KAGGLE_DATASETS_LOCATION = r'Archive' #Relative file path to working directory.
+UNZIP_DATASETS = True #Unzip AFTER downloading .zip file. Includes parallelism/concurrency. 
+CONSOLE_OUTPUT = False
 #############################(Configurations - End)#############################
 
 def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle URL. 
@@ -55,26 +57,37 @@ def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle
     return datasetNameString, datasetAuthorString
         
 ##ToDo:
-# kaggle authenticaion validation & common folder
-# Add logging
-# check to see if download interrupted, check for it based off .zip
-# warning if last update was some time ago
+# Finish logging. 
+# Add feature to check if contained .zip was fully downloaded or interrupted
+    #based off logging? based off posted file size online? 
+# Add optional console output
 # re-organize default list to sort by smallest file size
 # print start and finish times & filesize
 # check if works on linux
    
 def main():
+    logging.basicConfig(path=r'Source', filename=r'archive.log')
+    #add console file handler
+    #add file file handler
+    
+
+
+
+
+
+
+
     #Converting config's URL list to convenient datastructure.
     trackedDatasets = []
     for i in KAGGLE_DATASETS_URL_LIST:
         trackedDatasets.append(extractURLData(i))
 
-######################(CSV Version Control / Auto-Updater)######################
-    #Note: Date naming convention is YYYY-MM-DD
+######################(CSV Version Control / Auto-Updater)######################    
     for datasetName, datasetAuthor in trackedDatasets:        
         individualDatasetLocation = os.path.join(KAGGLE_DATASETS_LOCATION,datasetName)
         #! Mark process start here
 
+        #Note: Date naming convention is YYYY-MM-DD
         try: #Checking online version's latest date.
             kaggleOnlineVersion = kaggleRecentVersionDate(datasetAuthor,datasetName)
         except:
@@ -94,10 +107,10 @@ def main():
             newDateFolderPath = os.path.join(individualDatasetLocation, kaggleOnlineVersion)
             os.makedirs(newDateFolderPath)
             kaggleSourceName = datasetAuthor + '/' + datasetName
-            os.system(kaggleDownloadCmd(kaggleSourceName, newDateFolderPath, unzip=False))
-            #Note: kaggle unzipping uses parrallelism/concurrency natively. 
+            os.system(kaggleDownloadCmd(kaggleSourceName, newDateFolderPath, unzip=UNZIP_DATASETS)) 
         #! Mark process end here
         time.sleep(5) #Prevent API spam
 
 if __name__ == '__main__':
+    os.system('cls')
     main()

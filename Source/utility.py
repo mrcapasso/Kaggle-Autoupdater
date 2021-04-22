@@ -1,6 +1,7 @@
 #!/user/bin/python3.9.1
 import os
 
+#Note, key authentication exists natively in kaggle module. 
 def kaggleTokenExistence(mainStorageDrive: str='C:\\') -> bool: 
     normalAPILocation = os.path.join(mainStorageDrive, 'Users', os.getlogin(), '.kaggle')
     kaggleToken = r'kaggle.json'

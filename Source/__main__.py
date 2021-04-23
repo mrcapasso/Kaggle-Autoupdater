@@ -45,7 +45,7 @@ KAGGLE_DATASETS_URL_LIST = [
 KAGGLE_DATASETS_LOCATION = r'Archive'
 UNZIP_DATASETS = True
 CONSOLE_TEXT_OUTPUT = True
-SLEEP_TIME = 10
+SLEEP_TIME = 5
 #############################(Configurations - End)#############################
 
 def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle URL. 
@@ -68,30 +68,29 @@ def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle
     return datasetNameString, datasetAuthorString
         
 ##ToDo:
-# re-organize default list to sort by smallest file size first
-# loop online check for program in case of network issue
-# optimize sleep time using random ints, include it after webscrape
+# re-organize default list to sort by smallest file sizes first
 # include file's dates in logging, add warning at potential depreciation
 # create folder for logs based on date
 # documentation polish up
 # check if works on linux
    
 def main():
-    ############################(Program Logging - Start)###########################
+    start = time.time()
+    ###########################(Program Logging - Start)###########################
     #Logging Configs
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     logger = logging.getLogger('__main__')
     logger.propagate = CONSOLE_TEXT_OUTPUT
     logger.setLevel(logging.DEBUG)
     
-    # File Logging
+    #File Logging
     fh = logging.FileHandler(os.path.join('Source','__main__.log'))
     fh.setLevel(logging.INFO)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
     ##############################(Program Logging - End)###########################
 
-    logging.info('Program start. UNZIP_DATASETS: ' + str(UNZIP_DATASETS))
+    logger.info('Program start. UNZIP_DATASETS: ' + str(UNZIP_DATASETS))
 
     #Converting config's URL list to convenient datastructure.
     try:
@@ -108,9 +107,14 @@ def main():
         logger.debug(f"Initiating process: {datasetName}/{datasetAuthor}")
         individualDatasetLocation = os.path.join(KAGGLE_DATASETS_LOCATION,datasetName)
 
-        #Note: Date naming convention is YYYY-MM-DD
-        try: #Checking online version's latest date.
+        #Checking online version's latest date.
+        try: #Note: Date naming convention is YYYY-MM-DD
             kaggleOnlineVersion = kaggleRecentVersionDate(datasetAuthor,datasetName)
+            year = 1000
+            onlineDate = int(kaggleOnlineVersion)
+            todaysDate = int(time.strftime("%Y%m%d"))
+            if todaysDate - onlineDate > year:
+                logger.warning(f"Old dataset, potential depreciation: {datasetName}/{datasetAuthor}")
         except:
             if failedOnlineRetrivalCounter <= failedOnlineRetrivalAttempts: 
                 failedOnlineRetrivalCounter += 1
@@ -120,21 +124,22 @@ def main():
             else: 
                 logger.critical(f"Max online retrival attempts reached, exiting.")
                 break
+        
+        #Checking for existence of previous dataset installations by dates.
         kaggleOfflineVersion = -1
-        try: #Checking for existence of previous dataset installations by dates.
-            
+        try: 
             #Case if dataset folder exists, but is empty.
             if os.listdir(individualDatasetLocation) == []: 
                 logger.info(f"New dataset: {datasetName}/{datasetAuthor}")
                 pass
-            
-            #Case if 
+            #Finding most recent offline version by date of existing dataset folders.
             elif len(os.listdir(individualDatasetLocation)) != 0:
                 kaggleOfflineVersion = max(set(os.listdir(individualDatasetLocation)))
         except:
             logger.error(f"Unable to retrieve offline version: {datasetName}/{datasetAuthor}")
             pass
 
+        #Comparing online and offline versions, then downloading if necessary.
         if kaggleOnlineVersion != kaggleOfflineVersion:
             logger.info(f"Outdated version: {datasetName}/{datasetAuthor}")
             newDateFolderPath = os.path.join(individualDatasetLocation, kaggleOnlineVersion)
@@ -149,7 +154,8 @@ def main():
         logger.debug(f"Ending process: {datasetName}/{datasetAuthor}")
         logger.info(f"Sleeping: {SLEEP_TIME} seconds.")
         time.sleep(SLEEP_TIME) #Prevent too many requests at once.
-    logging.info('Program end.')
+    end = time.time()
+    logger.info(f"Program end. Elapsed time: {end-start}")
 
 if __name__ == '__main__':
     try: #Refreshs logs each run.

@@ -7,6 +7,7 @@ global KAGGLE_DATASETS_URL_LIST, KAGGLE_DATASETS_LOCATION, KAGGLE_REMOVE_JSON
 global UNZIP_DATASETS, CONSOLE_TEXT_OUTPUT, SLEEP_TIME
 KAGGLE_DATASETS_URL_LIST = [ 
         #Note: Please ensure your URL list matches the same formatting.
+        #Format: https://www.kaggle.com/<author>/<datasetname>
         'https://www.kaggle.com/rsrishav/youtube-trending-video-dataset',
         'https://www.kaggle.com/gauravduttakiit/covid-19',
         'https://www.kaggle.com/paultimothymooney/coronavirus-in-italy',
@@ -27,12 +28,24 @@ KAGGLE_DATASETS_URL_LIST = [
         'https://www.kaggle.com/antgoldbloom/covid19-data-from-john-hopkins-university',
         'https://www.kaggle.com/new-york-state/nys-currently-licensed-real-estate-appraisers',
         'https://www.kaggle.com/new-york-state/nys-city-of-albany-building-permits-issued',
-        'https://www.kaggle.com/sobhanmoosavi/us-accidents'
+        'https://www.kaggle.com/sobhanmoosavi/us-accidents',
+        'https://www.kaggle.com/gpreda/covid-world-vaccination-progress',
+        'https://www.kaggle.com/arthurio/italian-vaccination',
+        'https://www.kaggle.com/kaggle/meta-kaggle',
+        'https://www.kaggle.com/dhruvildave/github-commit-messages-dataset',
+        'https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks',
+        'https://www.kaggle.com/fireballbyedimyrnmom/us-counties-covid-19-dataset',
+        'https://www.kaggle.com/dhruvildave/billboard-the-hot-100-songs',
+        'https://www.kaggle.com/komalkhetlani/population-growth-annual',
+        'https://www.kaggle.com/austinreese/craigslist-carstrucks-data',
+        'https://www.kaggle.com/paultimothymooney/stock-market-data',
+        'https://www.kaggle.com/brendan45774/hollywood-most-profitable-stories',
+        'https://www.kaggle.com/dhruvildave/top-play-store-games',
         ]
 KAGGLE_DATASETS_LOCATION = r'Archive'
 UNZIP_DATASETS = True
 CONSOLE_TEXT_OUTPUT = True
-SLEEP_TIME = 15
+SLEEP_TIME = 10
 #############################(Configurations - End)#############################
 
 def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle URL. 
@@ -56,12 +69,12 @@ def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle
         
 ##ToDo:
 # re-organize default list to sort by smallest file size first
-# make sure '/' at end of URL doesnt break program
-# terminate program if too many failed online checks
 # loop online check for program in case of network issue
 # optimize sleep time using random ints, include it after webscrape
 # include file's dates in logging, add warning at potential depreciation
 # create folder for logs based on date
+# fix error message output when offline version not found: triggers when file not previously downloaded
+# add network connectivity checker when online
 # check if works on linux
    
 def main():
@@ -90,6 +103,8 @@ def main():
         logging.critical(f"Invalid URL entry: {i}")
 
     ######################(CSV Version Control / Auto-Updater)######################    
+    failedOnlineRetrivalCounter = 1
+    failedOnlineRetrivalAttempts = 3
     for datasetName, datasetAuthor in trackedDatasets:        
         logger.debug(f"Initiating process: {datasetName}/{datasetAuthor}")
         individualDatasetLocation = os.path.join(KAGGLE_DATASETS_LOCATION,datasetName)
@@ -98,13 +113,24 @@ def main():
         try: #Checking online version's latest date.
             kaggleOnlineVersion = kaggleRecentVersionDate(datasetAuthor,datasetName)
         except:
-            logger.critical(f"Unable to retrieve online version: {datasetName}/{datasetAuthor}")
-            time.sleep(30)
-            continue
-
+            if failedOnlineRetrivalCounter <= failedOnlineRetrivalAttempts: 
+                failedOnlineRetrivalCounter += 1
+                logger.critical(f"Unable to retrieve online version: {datasetName}/{datasetAuthor}")
+                time.sleep(5**failedOnlineRetrivalCounter)
+                continue
+            else: 
+                logger.critical(f"Max online retrival attempts reached, exiting.")
+                break
         kaggleOfflineVersion = -1
-        try: #Checking for existence of previous dataset installations.
-            if len(os.listdir(individualDatasetLocation)) != 0:
+        try: #Checking for existence of previous dataset installations by dates.
+            
+            #Case if dataset folder exists, but is empty.
+            if os.listdir(individualDatasetLocation) == []: 
+                logger.info(f"New dataset: {datasetName}/{datasetAuthor}")
+                pass
+            
+            #Case if 
+            elif len(os.listdir(individualDatasetLocation)) != 0:
                 kaggleOfflineVersion = max(set(os.listdir(individualDatasetLocation)))
         except:
             logger.error(f"Unable to retrieve offline version: {datasetName}/{datasetAuthor}")

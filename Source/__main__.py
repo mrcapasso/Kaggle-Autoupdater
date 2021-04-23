@@ -62,6 +62,8 @@ def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle
 # optimize sleep time using random ints, include it after webscrape
 # include file's dates in logging, add warning at potential depreciation
 # create folder for logs based on date
+# documentation polish up
+# rotating user agent?
 # check if works on linux
    
 def main():

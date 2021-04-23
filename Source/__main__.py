@@ -4,7 +4,7 @@ from kaggle_API import kaggleDownloadCmd, kaggleRecentVersionDate
 
 ############################(Configurations - Start)############################
 global KAGGLE_DATASETS_URL_LIST, KAGGLE_DATASETS_LOCATION, KAGGLE_REMOVE_JSON
-global UNZIP_DATASETS, CONSOLE_TEXT_OUTPUT
+global UNZIP_DATASETS, CONSOLE_TEXT_OUTPUT, SLEEP_TIME
 KAGGLE_DATASETS_URL_LIST = [ 
         #Note: Please ensure your URL list matches the same formatting.
         'https://www.kaggle.com/rsrishav/youtube-trending-video-dataset',
@@ -18,7 +18,7 @@ KAGGLE_DATASETS_URL_LIST = [
         'https://www.kaggle.com/aaron7sun/stocknews',
         'https://www.kaggle.com/jealousleopard/goodreadsbooks',
         'https://www.kaggle.com/dhruvildave/wikibooks-dataset',
-        #'https://www.kaggle.com/imsparsh/musicnet-dataset',
+        'https://www.kaggle.com/imsparsh/musicnet-dataset',
         'https://www.kaggle.com/datasnaek/chess',
         'https://www.kaggle.com/shivamb/netflix-shows',
         'https://www.kaggle.com/unsdsn/world-happiness',
@@ -32,6 +32,7 @@ KAGGLE_DATASETS_URL_LIST = [
 KAGGLE_DATASETS_LOCATION = r'Archive'
 UNZIP_DATASETS = True
 CONSOLE_TEXT_OUTPUT = True
+SLEEP_TIME = 15
 #############################(Configurations - End)#############################
 
 def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle URL. 
@@ -58,28 +59,24 @@ def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle
 # make sure '/' at end of URL doesnt break program
 # terminate program if too many failed online checks
 # loop online check for program in case of network issue
+# optimize sleep time using random ints, include it after webscrape
+# include file's dates in logging, add warning at potential depreciation
 # create folder for logs based on date
 # check if works on linux
    
 def main():
     ############################(Program Logging - Start)###########################
     #Logging Configs
-    logger = logging.getLogger('__main__')
-    logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
+    logger = logging.getLogger('__main__')
+    logger.propagate = CONSOLE_TEXT_OUTPUT
+    logger.setLevel(logging.DEBUG)
+    
     # File Logging
     fh = logging.FileHandler(os.path.join('Source','__main__.log'))
     fh.setLevel(logging.INFO)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
-
-    # Console Logging
-    if CONSOLE_TEXT_OUTPUT == True:
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.WARNING)
-        ch.setFormatter(formatter)
-        logger.addHandler(ch)
     ##############################(Program Logging - End)###########################
 
     logging.info('Program start. UNZIP_DATASETS: ' + str(UNZIP_DATASETS))
@@ -96,7 +93,6 @@ def main():
     for datasetName, datasetAuthor in trackedDatasets:        
         logger.debug(f"Initiating process: {datasetName}/{datasetAuthor}")
         individualDatasetLocation = os.path.join(KAGGLE_DATASETS_LOCATION,datasetName)
-        #! Mark process start here
 
         #Note: Date naming convention is YYYY-MM-DD
         try: #Checking online version's latest date.
@@ -121,12 +117,13 @@ def main():
             kaggleSourceName = datasetAuthor + '/' + datasetName
             logger.info(f"Starting download: {datasetName}/{datasetAuthor}")
             os.system(kaggleDownloadCmd(kaggleSourceName, newDateFolderPath,
-            quiet=CONSOLE_TEXT_OUTPUT, unzip=UNZIP_DATASETS)) 
+            quiet=not(CONSOLE_TEXT_OUTPUT), unzip=UNZIP_DATASETS)) 
             logger.info(f"Finished download: {datasetName}/{datasetAuthor}")
         else:
             logger.info(f"Files up-to-date: {datasetName}/{datasetAuthor}")
         logger.debug(f"Ending process: {datasetName}/{datasetAuthor}")
-        time.sleep(15) #Prevent website spam.
+        logger.info(f"Sleeping: {SLEEP_TIME} seconds.")
+        time.sleep(SLEEP_TIME) #Prevent too many requests at once.
     logging.info('Program end.')
 
 if __name__ == '__main__':

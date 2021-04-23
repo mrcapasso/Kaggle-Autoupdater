@@ -1,14 +1,11 @@
 #!/user/bin/python3.9.1
 import os, logging, time, csv
-    #Logging Docs: https://docs.python.org/3/library/logging.html
-    #CSV Docs: https://docs.python.org/3/library/csv.html
-    #Time Docs: https://docs.python.org/3/library/time.html
 from kaggle_API import kaggleDownloadCmd, kaggleRecentVersionDate
 
 ############################(Configurations - Start)############################
 global KAGGLE_DATASETS_URL_LIST, KAGGLE_DATASETS_LOCATION, KAGGLE_REMOVE_JSON
+global UNZIP_DATASETS, CONSOLE_TEXT_OUTPUT
 KAGGLE_DATASETS_URL_LIST = [ 
-        #Desc: These are the datasets you want to auto-download.
         #Note: Please ensure your URL list matches the same formatting.
         'https://www.kaggle.com/rsrishav/youtube-trending-video-dataset',
         'https://www.kaggle.com/gauravduttakiit/covid-19',
@@ -32,9 +29,9 @@ KAGGLE_DATASETS_URL_LIST = [
         'https://www.kaggle.com/new-york-state/nys-city-of-albany-building-permits-issued',
         'https://www.kaggle.com/sobhanmoosavi/us-accidents'
         ]
-KAGGLE_DATASETS_LOCATION = r'Archive' #Relative file path to working directory.
-UNZIP_DATASETS = True #Unzip AFTER downloading .zip file. Includes parallelism/concurrency. 
-CONSOLE_OUTPUT = False
+KAGGLE_DATASETS_LOCATION = r'Archive'
+UNZIP_DATASETS = True
+CONSOLE_TEXT_OUTPUT = True
 #############################(Configurations - End)#############################
 
 def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle URL. 
@@ -57,33 +54,47 @@ def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle
     return datasetNameString, datasetAuthorString
         
 ##ToDo:
-# Finish logging. 
-# Add feature to check if contained .zip was fully downloaded or interrupted
-    #based off logging? based off posted file size online? 
-# Add optional console output
-# re-organize default list to sort by smallest file size
-# print start and finish times & filesize
+# re-organize default list to sort by smallest file size first
+# make sure '/' at end of URL doesnt break program
+# terminate program if too many failed online checks
+# loop online check for program in case of network issue
+# create folder for logs based on date
 # check if works on linux
    
 def main():
-    logging.basicConfig(path=r'Source', filename=r'archive.log')
-    #add console file handler
-    #add file file handler
-    
+    ############################(Program Logging - Start)###########################
+    #Logging Configs
+    logger = logging.getLogger('__main__')
+    logger.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
+    # File Logging
+    fh = logging.FileHandler(os.path.join('Source','__main__.log'))
+    fh.setLevel(logging.INFO)
+    fh.setFormatter(formatter)
+    logger.addHandler(fh)
 
+    # Console Logging
+    if CONSOLE_TEXT_OUTPUT == True:
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.WARNING)
+        ch.setFormatter(formatter)
+        logger.addHandler(ch)
+    ##############################(Program Logging - End)###########################
 
-
-
-
+    logging.info('Program start. UNZIP_DATASETS: ' + str(UNZIP_DATASETS))
 
     #Converting config's URL list to convenient datastructure.
-    trackedDatasets = []
-    for i in KAGGLE_DATASETS_URL_LIST:
-        trackedDatasets.append(extractURLData(i))
+    try:
+        trackedDatasets = []
+        for i in KAGGLE_DATASETS_URL_LIST:
+            trackedDatasets.append(extractURLData(i))
+    except:
+        logging.critical(f"Invalid URL entry: {i}")
 
-######################(CSV Version Control / Auto-Updater)######################    
+    ######################(CSV Version Control / Auto-Updater)######################    
     for datasetName, datasetAuthor in trackedDatasets:        
+        logger.debug(f"Initiating process: {datasetName}/{datasetAuthor}")
         individualDatasetLocation = os.path.join(KAGGLE_DATASETS_LOCATION,datasetName)
         #! Mark process start here
 
@@ -91,9 +102,8 @@ def main():
         try: #Checking online version's latest date.
             kaggleOnlineVersion = kaggleRecentVersionDate(datasetAuthor,datasetName)
         except:
-            print('Error encountered on retrieving online recent version date.')
-            print('Moving to next kaggle dataset.')
-            time.sleep(5)
+            logger.critical(f"Unable to retrieve online version: {datasetName}/{datasetAuthor}")
+            time.sleep(30)
             continue
 
         kaggleOfflineVersion = -1
@@ -101,16 +111,28 @@ def main():
             if len(os.listdir(individualDatasetLocation)) != 0:
                 kaggleOfflineVersion = max(set(os.listdir(individualDatasetLocation)))
         except:
+            logger.error(f"Unable to retrieve offline version: {datasetName}/{datasetAuthor}")
             pass
 
         if kaggleOnlineVersion != kaggleOfflineVersion:
+            logger.info(f"Outdated version: {datasetName}/{datasetAuthor}")
             newDateFolderPath = os.path.join(individualDatasetLocation, kaggleOnlineVersion)
             os.makedirs(newDateFolderPath)
             kaggleSourceName = datasetAuthor + '/' + datasetName
-            os.system(kaggleDownloadCmd(kaggleSourceName, newDateFolderPath, unzip=UNZIP_DATASETS)) 
-        #! Mark process end here
-        time.sleep(5) #Prevent API spam
+            logger.info(f"Starting download: {datasetName}/{datasetAuthor}")
+            os.system(kaggleDownloadCmd(kaggleSourceName, newDateFolderPath,
+            quiet=CONSOLE_TEXT_OUTPUT, unzip=UNZIP_DATASETS)) 
+            logger.info(f"Finished download: {datasetName}/{datasetAuthor}")
+        else:
+            logger.info(f"Files up-to-date: {datasetName}/{datasetAuthor}")
+        logger.debug(f"Ending process: {datasetName}/{datasetAuthor}")
+        time.sleep(15) #Prevent website spam.
+    logging.info('Program end.')
 
 if __name__ == '__main__':
+    try: #Refreshs logs each run.
+        os.unlink(os.path.join('Source','__main__.log'))
+    except:
+        pass
     os.system('cls')
     main()

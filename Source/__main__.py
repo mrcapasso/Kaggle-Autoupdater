@@ -45,7 +45,7 @@ KAGGLE_DATASETS_URL_LIST = [
 KAGGLE_DATASETS_LOCATION = r'Archive'
 UNZIP_DATASETS = True
 CONSOLE_TEXT_OUTPUT = True
-SLEEP_TIME = 5
+SLEEP_TIME = 10
 #############################(Configurations - End)#############################
 
 def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle URL. 
@@ -68,10 +68,9 @@ def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle
     return datasetNameString, datasetAuthorString
         
 ##ToDo:
-# re-organize default list to sort by smallest file sizes first
-# include file's dates in logging, add warning at potential depreciation
 # create folder for logs based on date
 # documentation polish up
+# verify offline error logging is fixed
 # check if works on linux
    
 def main():
@@ -85,7 +84,7 @@ def main():
     
     #File Logging
     fh = logging.FileHandler(os.path.join('Source','__main__.log'))
-    fh.setLevel(logging.INFO)
+    fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
     ##############################(Program Logging - End)###########################
@@ -111,10 +110,10 @@ def main():
         try: #Note: Date naming convention is YYYY-MM-DD
             kaggleOnlineVersion = kaggleRecentVersionDate(datasetAuthor,datasetName)
             year = 1000
-            onlineDate = int(kaggleOnlineVersion)
+            onlineDate = int(kaggleOnlineVersion.replace('-',''))
             todaysDate = int(time.strftime("%Y%m%d"))
             if todaysDate - onlineDate > year:
-                logger.warning(f"Old dataset, potential depreciation: {datasetName}/{datasetAuthor}")
+                logger.warning(f"Potential dataset depreciation: {datasetName}/{datasetAuthor}")
         except:
             if failedOnlineRetrivalCounter <= failedOnlineRetrivalAttempts: 
                 failedOnlineRetrivalCounter += 1
@@ -131,7 +130,6 @@ def main():
             #Case if dataset folder exists, but is empty.
             if os.listdir(individualDatasetLocation) == []: 
                 logger.info(f"New dataset: {datasetName}/{datasetAuthor}")
-                pass
             #Finding most recent offline version by date of existing dataset folders.
             elif len(os.listdir(individualDatasetLocation)) != 0:
                 kaggleOfflineVersion = max(set(os.listdir(individualDatasetLocation)))

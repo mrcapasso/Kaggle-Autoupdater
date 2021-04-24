@@ -1,6 +1,7 @@
 #!/user/bin/python3.9.1
 import os, logging, time, csv
 from kaggle_API import kaggleDownloadCmd, kaggleRecentVersionDate
+from utility import elapsedTimeCalculator, extractURLData, folderSizeAmount, byteUnitConverter
 
 ############################(Configurations - Start)############################
 global KAGGLE_DATASETS_URL_LIST, KAGGLE_DATASETS_LOCATION, KAGGLE_REMOVE_JSON
@@ -52,35 +53,16 @@ UNZIP_DATASETS = True
 CONSOLE_TEXT_OUTPUT = True
 SLEEP_TIME = 10
 #############################(Configurations - End)#############################
-
-def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle URL. 
-    datasetName = []
-    datasetAuthor = []
-    #URL formatted as: www.kaggle.com/<datasetAuthor>/<datasetName>
-    for i in reversed(url):
-        if i != r'/':
-            datasetName.append(i)
-        else:
-            datasetNameString = ''.join(datasetName[::-1])
-            reducedURL = url.replace(r'/' + datasetNameString, '')
-            break
-    for j in reversed(reducedURL):
-        if j != r'/':
-            datasetAuthor.append(j)
-        else:
-            datasetAuthorString = ''.join(datasetAuthor[::-1])
-            break
-    return datasetNameString, datasetAuthorString
         
 ##ToDo:
 # create folder for logs based on date
 # documentation polish up
-# license pre-check
+# amt of data added
 # verify offline error logging is fixed
 # check if works on linux
    
 def main():
-    start = time.time()
+    startTime = time.time()
     ###########################(Program Logging - Start)###########################
     #Logging Configs
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -95,7 +77,8 @@ def main():
     logger.addHandler(fh)
     ##############################(Program Logging - End)###########################
 
-    logger.info('Program start. UNZIP_DATASETS: ' + str(UNZIP_DATASETS))
+    startSize = folderSizeAmount(os.path.abspath(KAGGLE_DATASETS_LOCATION))
+    logger.info('##############(Program Start)###########')
 
     #Converting config's URL list to convenient datastructure.
     try:
@@ -158,13 +141,17 @@ def main():
         logger.debug(f"Ending process: {datasetName}/{datasetAuthor}")
         logger.info(f"Sleeping: {SLEEP_TIME} seconds.")
         time.sleep(SLEEP_TIME) #Prevent too many requests at once.
-    end = time.time()
-    logger.info(f"Program end. Elapsed time: {end-start}")
+    endTime = time.time()
+    endSize = folderSizeAmount(os.path.abspath(KAGGLE_DATASETS_LOCATION))
+    sizeDifference = endSize - startSize #This is in bytes
+    logger.info('##############(Program End)#############')
+    logger.info(f"Elapsed time: {elapsedTimeCalculator(startTime,endTime)}")
+    logger.info(f"Added data: {byteUnitConverter(sizeDifference)}.")
 
 if __name__ == '__main__':
-    try: #Refreshs logs each run.
-        os.unlink(os.path.join('Source','__main__.log'))
-    except:
-        pass
+    # try: #Refreshs logs each run.
+    #     os.unlink(os.path.join('Source','__main__.log'))
+    # except:
+    #     pass
     os.system('cls')
     main()

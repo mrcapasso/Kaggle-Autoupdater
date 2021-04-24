@@ -16,6 +16,25 @@ def removeByFileExtension(extension:str, directory:str):
         if file[-len(extension):] == extension:
             os.unlink(os.path.join(directory, file)) 
 
+def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle URL. 
+    datasetName = []
+    datasetAuthor = []
+    #URL formatted as: www.kaggle.com/<datasetAuthor>/<datasetName>
+    for i in reversed(url):
+        if i != r'/':
+            datasetName.append(i)
+        else:
+            datasetNameString = ''.join(datasetName[::-1])
+            reducedURL = url.replace(r'/' + datasetNameString, '')
+            break
+    for j in reversed(reducedURL):
+        if j != r'/':
+            datasetAuthor.append(j)
+        else:
+            datasetAuthorString = ''.join(datasetAuthor[::-1])
+            break
+    return datasetNameString, datasetAuthorString
+
 def elapsedTimeCalculator(startTime:float, endTime:float, decRound:int=2) -> str:
     elapsedTimeSecs = endTime - startTime
     elapsedTimeMins = elapsedTimeSecs/60
@@ -29,6 +48,23 @@ def elapsedTimeCalculator(startTime:float, endTime:float, decRound:int=2) -> str
         return str(round(elapsedTimeMins,decRound)) + ' minutes'
     else: #Time as unit of seconds.
         return str(round(elapsedTimeSecs,decRound)) + ' seconds'
+
+def folderSizeAmount(absFolderPath:str):
+    totalSize = 0
+    for folderName, _, fileList in os.walk(absFolderPath):
+        os.chdir(folderName)
+        for file in fileList: 
+            individalFilePath = os.path.abspath(file)
+            totalSize += os.path.getsize(individalFilePath)
+    return totalSize
+    
+def byteUnitConverter(sizeInBytes:int) -> str: 
+    unitsDict = {'bytes':1, 'kilobytes':3, 'megabytes':6, 'gigabytes':9, 'terabytes':12, 'pedabytes':15}
+    for i in unitsDict:
+        exponent = unitsDict.get(i)
+        if sizeInBytes <= 10**(exponent+3):
+            unitConversion = round(sizeInBytes/(10**exponent),2)
+            return  str(unitConversion) + ' ' + i
 
 # class kaggleMetadadata:
 #     #Classes Example: https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html
@@ -49,4 +85,4 @@ def elapsedTimeCalculator(startTime:float, endTime:float, decRound:int=2) -> str
 #         self.currentOfflineVersion = currentOfflineVersion
 
 if __name__ == '__main__':
-    print(elapsedTimeCalculator(0, 9))
+    pass

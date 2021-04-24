@@ -8,7 +8,12 @@ global UNZIP_DATASETS, CONSOLE_TEXT_OUTPUT, SLEEP_TIME
 KAGGLE_DATASETS_URL_LIST = [ 
         #Note: Please ensure your URL list matches the same formatting.
         #Format: https://www.kaggle.com/<author>/<datasetname>
-        'https://www.kaggle.com/rsrishav/youtube-trending-video-dataset',
+        'https://www.kaggle.com/rsrishav/youtube-trending-video-dataset', #CC0 1.0 Universal (CC0 1.0)
+        'https://www.kaggle.com/hgultekin/covid19-stream-data', #Database Contents License (DbCL) v1.0
+        'https://www.kaggle.com/cityofLA/los-angeles-parking-citations', #Open Data Commons Open Database License (ODbL) v1.0
+        'https://www.kaggle.com/chaibapat/slogan-dataset', #Database Contents License (DbCL) v1.0
+        'https://www.kaggle.com/camnugent/sandp500', #CC0 1.0 Universal (CC0 1.0)
+        'https://www.kaggle.com/dhruvildave/github-commit-messages-dataset' #Open Data Commons Attribution License (ODC-By) v1.0
         'https://www.kaggle.com/gauravduttakiit/covid-19',
         'https://www.kaggle.com/paultimothymooney/coronavirus-in-italy',
         'https://www.kaggle.com/gpreda/all-covid19-vaccines-tweets',
@@ -70,6 +75,7 @@ def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle
 ##ToDo:
 # create folder for logs based on date
 # documentation polish up
+# license pre-check
 # verify offline error logging is fixed
 # check if works on linux
    

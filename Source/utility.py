@@ -59,30 +59,13 @@ def folderSizeAmount(absFolderPath:str):
     return totalSize
     
 def byteUnitConverter(sizeInBytes:int) -> str: 
-    unitsDict = {'bytes':1, 'kilobytes':3, 'megabytes':6, 'gigabytes':9, 'terabytes':12, 'pedabytes':15}
-    for i in unitsDict:
-        exponent = unitsDict.get(i)
-        if sizeInBytes <= 10**(exponent+3):
-            unitConversion = round(sizeInBytes/(10**exponent),2)
-            return  str(unitConversion) + ' ' + i
-
-# class kaggleMetadadata:
-#     #Classes Example: https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html
-#     #Classes Docs: https://docs.python.org/3/tutorial/classes.html
-#     #Kaggle Metadata Ex: https://www.kaggle.com/rashikrahmanpritom/heart-attack-analysis-prediction-dataset/metadata
-
-#     def __init__(self,author,license,updateFrequency,dateCreated,lastOnlineUpdate,lastOfflineUpdate,currentOnlineVersion,currentOfflineVersion): 
-#         #__init__ is a constructor for new object creation specific to class
-#         #self is used to show variables belong to this class
-#         #instaces are like states for a group (e.g. water is LIQUId, water is SOLID)
-#         self.author = author
-#         self.license = license
-#         self.updateFrequency = updateFrequency
-#         self.dateCreated = dateCreated
-#         self.lastOnlineUpdate = lastOnlineUpdate
-#         self.lastOfflineUpdate = lastOfflineUpdate
-#         self.currentOnlineVersion = currentOnlineVersion
-#         self.currentOfflineVersion = currentOfflineVersion
+    unitsDict = {'B':1, 'KBs':3, 'MBs':6, 'GBs':9, 'TBs':12, 'PBs':15, 'EBs':18}
+    for i in enumerate(unitsDict):
+        exponent = unitsDict.get(i[1])
+        if abs(sizeInBytes) < 1000:
+            return str(sizeInBytes) + ' bytes'
+        elif i[0]!=0 and abs(sizeInBytes)<10**(exponent+3):
+            return str(round(sizeInBytes/10**exponent,2)) + ' ' + i[1]
 
 if __name__ == '__main__':
     pass

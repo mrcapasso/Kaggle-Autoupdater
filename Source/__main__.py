@@ -9,47 +9,47 @@ global UNZIP_DATASETS, CONSOLE_TEXT_OUTPUT, SLEEP_TIME
 KAGGLE_DATASETS_URL_LIST = [ 
         #Note: Please ensure your URL list matches the same formatting.
         #Format: https://www.kaggle.com/<author>/<datasetname>
-        'https://www.kaggle.com/rsrishav/youtube-trending-video-dataset', #CC0 1.0 Universal (CC0 1.0)
-        'https://www.kaggle.com/hgultekin/covid19-stream-data', #Database Contents License (DbCL) v1.0
-        'https://www.kaggle.com/cityofLA/los-angeles-parking-citations', #Open Data Commons Open Database License (ODbL) v1.0
-        'https://www.kaggle.com/chaibapat/slogan-dataset', #Database Contents License (DbCL) v1.0
-        'https://www.kaggle.com/camnugent/sandp500', #CC0 1.0 Universal (CC0 1.0)
-        'https://www.kaggle.com/dhruvildave/github-commit-messages-dataset' #Open Data Commons Attribution License (ODC-By) v1.0
-        'https://www.kaggle.com/gauravduttakiit/covid-19',
-        'https://www.kaggle.com/paultimothymooney/coronavirus-in-italy',
-        'https://www.kaggle.com/gpreda/all-covid19-vaccines-tweets',
-        'https://www.kaggle.com/gpreda/pfizer-vaccine-on-reddit',
-        'https://www.kaggle.com/shivamb/netflix-shows',
-        'https://www.kaggle.com/gpreda/reddit-wallstreetsbets-posts',
-        'https://www.kaggle.com/shivkumarganesh/politifact-factcheck-data',
-        'https://www.kaggle.com/aaron7sun/stocknews',
-        'https://www.kaggle.com/jealousleopard/goodreadsbooks',
-        'https://www.kaggle.com/dhruvildave/wikibooks-dataset',
-        'https://www.kaggle.com/imsparsh/musicnet-dataset',
-        'https://www.kaggle.com/datasnaek/chess',
-        'https://www.kaggle.com/shivamb/netflix-shows',
-        'https://www.kaggle.com/unsdsn/world-happiness',
-        'https://www.kaggle.com/arashnic/hr-analytics-job-change-of-data-scientists',
-        'https://www.kaggle.com/tencars/392-crypto-currency-pairs-at-minute-resolution',
-        'https://www.kaggle.com/antgoldbloom/covid19-data-from-john-hopkins-university',
-        'https://www.kaggle.com/new-york-state/nys-currently-licensed-real-estate-appraisers',
-        'https://www.kaggle.com/new-york-state/nys-city-of-albany-building-permits-issued',
-        'https://www.kaggle.com/sobhanmoosavi/us-accidents',
-        'https://www.kaggle.com/gpreda/covid-world-vaccination-progress',
-        'https://www.kaggle.com/arthurio/italian-vaccination',
-        'https://www.kaggle.com/kaggle/meta-kaggle',
-        'https://www.kaggle.com/dhruvildave/github-commit-messages-dataset',
-        'https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks',
-        'https://www.kaggle.com/fireballbyedimyrnmom/us-counties-covid-19-dataset',
-        'https://www.kaggle.com/dhruvildave/billboard-the-hot-100-songs',
-        'https://www.kaggle.com/komalkhetlani/population-growth-annual',
-        'https://www.kaggle.com/austinreese/craigslist-carstrucks-data',
-        'https://www.kaggle.com/paultimothymooney/stock-market-data',
-        'https://www.kaggle.com/brendan45774/hollywood-most-profitable-stories',
-        'https://www.kaggle.com/dhruvildave/top-play-store-games',
+        #'https://www.kaggle.com/rsrishav/youtube-trending-video-dataset', #CC0 1.0 Universal (CC0 1.0)
+        #'https://www.kaggle.com/hgultekin/covid19-stream-data', #Database Contents License (DbCL) v1.0
+        #'https://www.kaggle.com/cityofLA/los-angeles-parking-citations', #Open Data Commons Open Database License (ODbL) v1.0
+        #'https://www.kaggle.com/chaibapat/slogan-dataset', #Database Contents License (DbCL) v1.0
+        #'https://www.kaggle.com/camnugent/sandp500', #CC0 1.0 Universal (CC0 1.0)
+        #'https://www.kaggle.com/dhruvildave/github-commit-messages-dataset' #Open Data Commons Attribution License (ODC-By) v1.0
+        # 'https://www.kaggle.com/gauravduttakiit/covid-19',
+        # 'https://www.kaggle.com/paultimothymooney/coronavirus-in-italy',
+        # 'https://www.kaggle.com/gpreda/all-covid19-vaccines-tweets',
+        # 'https://www.kaggle.com/gpreda/pfizer-vaccine-on-reddit',
+        # 'https://www.kaggle.com/shivamb/netflix-shows',
+        # 'https://www.kaggle.com/gpreda/reddit-wallstreetsbets-posts',
+        # 'https://www.kaggle.com/shivkumarganesh/politifact-factcheck-data',
+        # 'https://www.kaggle.com/aaron7sun/stocknews',
+        # 'https://www.kaggle.com/jealousleopard/goodreadsbooks',
+        # 'https://www.kaggle.com/dhruvildave/wikibooks-dataset',
+        # 'https://www.kaggle.com/imsparsh/musicnet-dataset',
+        # 'https://www.kaggle.com/datasnaek/chess',
+        # 'https://www.kaggle.com/shivamb/netflix-shows',
+        # 'https://www.kaggle.com/unsdsn/world-happiness',
+        # 'https://www.kaggle.com/arashnic/hr-analytics-job-change-of-data-scientists',
+        # 'https://www.kaggle.com/tencars/392-crypto-currency-pairs-at-minute-resolution',
+        # 'https://www.kaggle.com/antgoldbloom/covid19-data-from-john-hopkins-university',
+        # 'https://www.kaggle.com/new-york-state/nys-currently-licensed-real-estate-appraisers',
+        # 'https://www.kaggle.com/new-york-state/nys-city-of-albany-building-permits-issued',
+        # 'https://www.kaggle.com/sobhanmoosavi/us-accidents',
+        # 'https://www.kaggle.com/gpreda/covid-world-vaccination-progress',
+         'https://www.kaggle.com/arthurio/italian-vaccination',
+        # 'https://www.kaggle.com/kaggle/meta-kaggle',
+        # 'https://www.kaggle.com/dhruvildave/github-commit-messages-dataset',
+        # 'https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks',
+         'https://www.kaggle.com/fireballbyedimyrnmom/us-counties-covid-19-dataset',
+        # 'https://www.kaggle.com/dhruvildave/billboard-the-hot-100-songs',
+        # 'https://www.kaggle.com/komalkhetlani/population-growth-annual',
+        # 'https://www.kaggle.com/austinreese/craigslist-carstrucks-data',
+        # 'https://www.kaggle.com/paultimothymooney/stock-market-data',
+        # 'https://www.kaggle.com/brendan45774/hollywood-most-profitable-stories',
+        # 'https://www.kaggle.com/dhruvildave/top-play-store-games',
         ]
 KAGGLE_DATASETS_LOCATION = r'Archive'
-UNZIP_DATASETS = True
+UNZIP_DATASETS = False
 CONSOLE_TEXT_OUTPUT = True
 SLEEP_TIME = 10
 #############################(Configurations - End)#############################
@@ -57,15 +57,16 @@ SLEEP_TIME = 10
 ##ToDo:
 # create folder for logs based on date
 # documentation polish up
-# amt of data added
+# amt of data added needs to be fixed w.r.t. lower unit sizes and neg values
 # verify offline error logging is fixed
+# modify time so it doesn't sleep if program is suppose to be finished
 # check if works on linux
    
 def main():
     startTime = time.time()
     ###########################(Program Logging - Start)###########################
     #Logging Configs
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     logger = logging.getLogger('__main__')
     logger.propagate = CONSOLE_TEXT_OUTPUT
     logger.setLevel(logging.DEBUG)
@@ -94,7 +95,8 @@ def main():
     failedOnlineRetrivalAttempts = 3
     for datasetName, datasetAuthor in trackedDatasets:        
         logger.debug(f"Initiating process: {datasetName}/{datasetAuthor}")
-        individualDatasetLocation = os.path.join(KAGGLE_DATASETS_LOCATION,datasetName)
+        individualDatasetLocation = os.path.abspath(datasetName)
+        logger.info('**individualDatasetLocation: ' + individualDatasetLocation) #temp
 
         #Checking online version's latest date.
         try: #Note: Date naming convention is YYYY-MM-DD
@@ -120,7 +122,7 @@ def main():
         kaggleOfflineVersion = -1
         try: 
             #Case if dataset folder exists, but is empty.
-            if os.listdir(individualDatasetLocation) == []: 
+            if os.listdir(individualDatasetLocation) == None: 
                 logger.info(f"New dataset: {datasetName}/{datasetAuthor}")
             #Finding most recent offline version by date of existing dataset folders.
             elif len(os.listdir(individualDatasetLocation)) != 0:
@@ -153,9 +155,9 @@ def main():
     logger.info(f"Added data: {byteUnitConverter(sizeDifference)}.")
 
 if __name__ == '__main__':
-    # try: #Refreshs logs each run.
-    #     os.unlink(os.path.join('Source','__main__.log'))
-    # except:
-    #     pass
+    try: #Refreshs logs each run.
+        os.unlink(os.path.join('Source','__main__.log'))
+    except:
+        pass
     os.system('cls')
     main()

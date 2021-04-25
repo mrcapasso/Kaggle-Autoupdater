@@ -58,7 +58,7 @@ SLEEP_TIME = 10
 # create folder for logs based on date
 # documentation polish up
 # verify offline error logging is fixed
-# modify time so it doesn't sleep if program is suppose to be finished
+# verify sleep timer is working as intended
 # check if works on linux
    
 def main():
@@ -92,6 +92,7 @@ def main():
     ######################(CSV Version Control / Auto-Updater)######################    
     failedOnlineRetrivalCounter = 1
     failedOnlineRetrivalAttempts = 3
+    timerPosition = 1
     for datasetName, datasetAuthor in trackedDatasets:        
         logger.debug(f"Initiating process: {datasetName}/{datasetAuthor}")
         individualDatasetLocation = os.path.abspath(datasetName)
@@ -145,7 +146,9 @@ def main():
             logger.info(f"Files up-to-date: {datasetName}/{datasetAuthor}")
         logger.debug(f"Ending process: {datasetName}/{datasetAuthor}")
         logger.info(f"Sleeping: {SLEEP_TIME} seconds.")
-        time.sleep(SLEEP_TIME) #Prevent too many requests at once.
+        timerPosition += 1
+        if timerPosition != len(trackedDatasets):
+            time.sleep(SLEEP_TIME) #Prevent too many requests at once.
     endTime = time.time()
     endSize = folderSizeAmount(os.path.abspath(KAGGLE_DATASETS_LOCATION))
     sizeDifference = endSize - startSize #This is in bytes

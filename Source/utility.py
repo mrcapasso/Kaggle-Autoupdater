@@ -65,6 +65,8 @@ def byteUnitConverter(sizeInBytes:int) -> str:
         if abs(sizeInBytes) < 1000:
             return str(sizeInBytes) + ' bytes'
         elif i[0]!=0 and abs(sizeInBytes)<10**(exponent+3):
+            #Note, for a better solution change (exponent+3) to the 
+            #value pair from the NEXT ith iteration. 3 was used for simplicity.
             return str(round(sizeInBytes/10**exponent,2)) + ' ' + i[1]
 
 if __name__ == '__main__':

@@ -57,7 +57,6 @@ SLEEP_TIME = 10
 ##ToDo:
 # create folder for logs based on date
 # documentation polish up
-# amt of data added needs to be fixed w.r.t. lower unit sizes and neg values
 # verify offline error logging is fixed
 # modify time so it doesn't sleep if program is suppose to be finished
 # check if works on linux

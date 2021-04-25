@@ -1,5 +1,5 @@
 #!/user/bin/python3.9.1
-import os, logging, time, csv
+import os, sys, logging, time, csv
 from kaggle_API import kaggleDownloadCmd, kaggleRecentVersionDate
 from utility import elapsedTimeCalculator, extractURLData, folderSizeAmount, byteUnitConverter
 
@@ -86,7 +86,8 @@ def main():
         for i in KAGGLE_DATASETS_URL_LIST:
             trackedDatasets.append(extractURLData(i))
     except:
-        logging.critical(f"Invalid URL entry: {i}")
+        logger.error(f"[Line: {sys.exc_info()[-1].tb_lineno}] [Problem: {sys.exc_info()[1]}]")
+        logger.critical(f"Error on {i}.")
 
     ######################(CSV Version Control / Auto-Updater)######################    
     failedOnlineRetrivalCounter = 1
@@ -106,10 +107,12 @@ def main():
         except:
             if failedOnlineRetrivalCounter <= failedOnlineRetrivalAttempts: 
                 failedOnlineRetrivalCounter += 1
+                logger.error(f"[Line: {sys.exc_info()[-1].tb_lineno}] [Problem: {sys.exc_info()[1]}]")
                 logger.critical(f"Unable to retrieve online version: {datasetName}/{datasetAuthor}")
                 time.sleep(5**failedOnlineRetrivalCounter)
                 continue
             else: 
+                logger.error(f"[Line: {sys.exc_info()[-1].tb_lineno}] [Problem: {sys.exc_info()[1]}]")
                 logger.critical(f"Max online retrival attempts reached, exiting.")
                 break
         
@@ -123,6 +126,7 @@ def main():
             elif len(os.listdir(individualDatasetLocation)) != 0:
                 kaggleOfflineVersion = max(set(os.listdir(individualDatasetLocation)))
         except:
+            logger.error(f"[Line: {sys.exc_info()[-1].tb_lineno}] [Problem: {sys.exc_info()[1]}]")
             logger.error(f"Unable to retrieve offline version: {datasetName}/{datasetAuthor}")
             pass
 

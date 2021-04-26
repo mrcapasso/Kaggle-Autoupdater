@@ -1,6 +1,7 @@
-Archive/*/*
+Archive/*
 kaggle.json
 *.log
+!demo.log
 __pycache__
 *.exe
 *.o

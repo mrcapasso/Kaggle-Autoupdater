@@ -6,7 +6,6 @@ from utility import elapsedTimeCalculator, extractURLData, folderSizeAmount, byt
 ##ToDo:
 # create folder for logs based on date
 # add datasets location pre-check for configs
-# fix lack of console output for logging
 # documentation polish up
 # check if works on linux
 # create seperate document for datasets URL and read into main()
@@ -14,6 +13,7 @@ from utility import elapsedTimeCalculator, extractURLData, folderSizeAmount, byt
 # verify alternative dataset locations works
 # verify sleeping does not hit last download
 # add day to start and end
+# add usage statistics
    
 def main():
     startTime = time.time()
@@ -63,14 +63,14 @@ def main():
         #Relative or absolute file paths accepted.
     UNZIP_DATASETS = True
         #Note: unzipping is done after file download and uses concurrency/parallelism.
-    CONSOLE_TEXT_OUTPUT = False
+    CONSOLE_TEXT_OUTPUT = True
     SLEEP_TIME = 10 
         #Sleeping between each download, do not lower below 10 seconds. 
     #############################(Configurations - End)#############################
 
 
     ###########################(Program Logging - Start)###########################
-    #Logging Configurations
+    #General Logging Configurations
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     logger = logging.getLogger('__main__')
     logger.propagate = CONSOLE_TEXT_OUTPUT
@@ -81,6 +81,13 @@ def main():
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
+
+    #Console Specific Logging Configurations
+    if CONSOLE_TEXT_OUTPUT == True: 
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.INFO)
+        ch.setFormatter(formatter)
+        logger.addHandler(ch)
     ##############################(Program Logging - End)###########################
 
 
@@ -149,7 +156,7 @@ def main():
                 os.makedirs(newDateFolderPath)
                 kaggleSourceName = datasetAuthor + '/' + datasetName
                 logger.info(f"Starting download: {datasetName}/{datasetAuthor}")
-                os.system(kaggleDownloadCmd(kaggleSourceName, newDateFolderPath,
+                print(kaggleDownloadCmd(kaggleSourceName, newDateFolderPath,
                 quiet=not(CONSOLE_TEXT_OUTPUT), unzip=UNZIP_DATASETS)) 
                 logger.info(f"Finished download: {datasetName}/{datasetAuthor}")
             else:

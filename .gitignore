@@ -12,6 +12,7 @@ __pycache__
 *.tar
 *.zip
 *.mp*
+*.txt
 
 #Demo Documents
 !Archive/netflix-shows/2021-04-05/*.csv

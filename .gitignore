@@ -1,8 +1,10 @@
+#Specific Ignore
 Archive/*
 kaggle.json
 *.log
-!demo.log
 __pycache__
+
+#General Ignore
 *.exe
 *.o
 *.so
@@ -10,3 +12,11 @@ __pycache__
 *.tar
 *.zip
 *.mp*
+
+#Demo Documents
+!Archive/netflix-shows/2021-04-05/*.csv
+#####Source: https://www.kaggle.com/shivamb/netflix-shows
+!Archive/goodreadsbooks/2020-08-04/*.csv
+####Source: https://www.kaggle.com/jealousleopard/goodreadsbooks
+!demo.log
+!*.URL

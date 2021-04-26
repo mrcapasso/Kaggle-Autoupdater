@@ -12,6 +12,7 @@ from utility import elapsedTimeCalculator, extractURLData, folderSizeAmount, byt
 # verify alternative dataset locations works
 # verify sleeping does not hit last download
 # add usage statistics
+# Add timeout to kaggle_API requests
    
 def main():
     startTime = time.time()
@@ -32,11 +33,11 @@ def main():
             'https://www.kaggle.com/gpreda/reddit-wallstreetsbets-posts',
             'https://www.kaggle.com/shivkumarganesh/politifact-factcheck-data',
             'https://www.kaggle.com/aaron7sun/stocknews',
-            'https://www.kaggle.com/jealousleopard/goodreadsbooks',
+            'https://www.kaggle.com/jealousleopard/goodreadsbooks', #Allowed in demo
             'https://www.kaggle.com/dhruvildave/wikibooks-dataset',
             'https://www.kaggle.com/imsparsh/musicnet-dataset',
             'https://www.kaggle.com/datasnaek/chess',
-            'https://www.kaggle.com/shivamb/netflix-shows',
+            'https://www.kaggle.com/shivamb/netflix-shows', #Allowed in demo
             'https://www.kaggle.com/unsdsn/world-happiness',
             'https://www.kaggle.com/arashnic/hr-analytics-job-change-of-data-scientists',
             'https://www.kaggle.com/tencars/392-crypto-currency-pairs-at-minute-resolution',

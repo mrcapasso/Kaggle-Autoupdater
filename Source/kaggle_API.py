@@ -1,35 +1,72 @@
 #!/user/bin/python3.9.1
-#! Note: This requires a current kaggle API token. See link below, very easy sign up. 
-#! API Link: https://www.kaggle.com/docs/api
+#* Note: These function require a valid Kaggle API token and kaggle module.  
+    #* API Token Link: https://www.kaggle.com/docs/api#authentication
+    #* Kaggle Module Installation: 'pip install kaggle'
+    #* Kaggle Module Documentation: https://github.com/Kaggle/kaggle-api
 
 import kaggle, os, re, requests
-    #pip install kaggle
 
 def kaggleDownloadCmd(dataset, downloadPath, fileName: str=None, unzip: bool=False, force: bool=False, quiet: bool=False) -> str:
-    #Reference URL: https://github.com/Kaggle/kaggle-api#download-dataset-files
-    #Note, unzip feature conflicts with kaggle redundant file checking.
+    '''Generates download CLI string for use with kaggle module and kaggle API.
+    
+    Args: 
+        dataset (str): Name of the desired dataset to download. 
+        downloadPath (str): Rel. or abs. file path for download location, defaults to working directory.
+        fileName (str): Specific file in dataset to download, defaults to downloading all files.  
+        unzip (bool): Unzips the downloaded file. Will delete the zip file when completed.
+        force (bool): Forces file download regardless of local version redundancy.
+        quiet (bool): Suppress console output of download status. 
+
+    Returns: 
+        CLI string to download kaggle datasets with designated parameters. 
+
+    Reference: 
+        https://github.com/Kaggle/kaggle-api#download-dataset-files
+
+    Notes: 
+        Unzip feature conflicts with kaggle module redundant file checking.
+    
+    '''
     if fileName == None: 
         i = False
     else: 
         i = True
     command = ('kaggle datasets download'
             + i*(' -f ' + str(fileName))
-                #File name, all files downloaded if not provided
             + (' -p ' + str(downloadPath))
-                #Folder where file(s) will be downloaded, defaults to current WD.
             + (' --unzip ')*unzip
-                #Unzip the downloaded file. Will delete the zip file when completed.
             + (' -o ')*force
-                #Skip check whether local version of file is up to date, force file download
             + (' -q ')*quiet
-                #Suppress printing information about the upload/download progress
             + ' ' + str(dataset)
-                #Dataset URL suffix in format <owner>/<dataset-name> (use "kaggle datasets list" to show options)
          )
     return command
 
-def kaggleListsCmd(search: str, tags: list, sortBy=' ', fileSize=' ', fileType=' ', license=' ', user=' ', pageNum: int=' ', myItem: bool=False, csv: bool=False ) -> str:
-    #Reference URL: https://github.com/Kaggle/kaggle-api#list-datasets
+def kaggleListsCmd(search: str, tags: list, sortBy=' ', fileSize:str=' ', fileType:str=' ', license=' ', user=' ', pageNum: int=' ', myItem: bool=False, csv: bool=False ) -> str:
+    '''Generates CLI string for listing kaggle datasets, used with kaggle module and kaggle API.
+    
+    Args:
+        search (str): Parameter to search kaggle dataset archive by.
+        tags (list): Kaggle tags to filter by -- ensure they are comma seperated.
+        sortBy (str): Options to sort by: 'hottest', 'votes, 'updated', 'active'.
+        fileSize (str): File sizes to filter by: 'all', 'small', 'medium', 'large'.
+        fileType (str): File types to filter by: 'all', 'csv', 'sqlite', 'json', 'bigQuery'.
+        license (str): Dataset licenses to filter by: 'all', 'cc', 'gpl', 'odb', 'other'.
+        user (str): Kaggle user to search by.
+        pagnum (int): Amount of page numbers to list, default is 20.
+        myItem (bool): Only display my items.
+        csv (bool): Print results in CSV, default is tabular format. 
+
+    Returns:
+        String to be used in CLI for listing kaggle datasets of provided filters.
+
+    Reference: 
+        https://github.com/Kaggle/kaggle-api#list-datasets
+
+    Notes: 
+        Big query datasets cannot be downloaded. 
+    
+    '''
+
     sortByBool = fileSizeBool = fileTypeBool = licenseBool = tagBool = searchBool = userBool = pageBool = False 
     if search != ' ':
         searchBool = True
@@ -63,7 +100,22 @@ def kaggleListsCmd(search: str, tags: list, sortBy=' ', fileSize=' ', fileType='
     return command    
 
 def kaggleRecentVersionNum(dataOwner: str, dataName: str, proxy:dict='') -> int:
-    #This method is intended to be temporary until the Kaggle metadata API retrival bug is fixed.
+    '''Obtains Kaggle dataset version number via 'requests' and 'regex' modules.
+
+    *This is a temporary solution until Kaggle's API metadata issue is fixed.*
+    
+    Args:
+        dataOwner (str): Author of the desired dataset.
+        dataName (str): Desired dataset's name.
+        proxy (dict): Requires advance configuration, see notes below.
+
+    Returns:
+        Returns an int with kaggle dataset's specific version number.
+
+    Notes: 
+        Proxy: https://docs.python-requests.org/en/master/user/advanced/#proxies
+    
+    '''
     metadataURL = r'https://www.kaggle.com/' + dataOwner + r'/' + dataName + r'/metadata'
     headers = {"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"}
     pageRequest = requests.get(metadataURL, proxies=proxy, headers=headers)
@@ -72,8 +124,23 @@ def kaggleRecentVersionNum(dataOwner: str, dataName: str, proxy:dict='') -> int:
     return max(set(versionList))
 
 def kaggleRecentVersionDate(dataOwner: str, dataName: str, proxy:dict='') -> str:
-    #This method is intended to be temporary until the Kaggle metadata API retrival bug is fixed.
-    #This function assumes the most recent date posted on metadata is the version's last update date.
+    '''Obtains Kaggle dataset version date via 'requests' and 'regex' modules.
+
+    *This is a temporary solution until Kaggle's API metadata issue is fixed.*
+    
+    Args:
+        dataOwner (str): Author of the desired dataset.
+        dataName (str): Desired dataset's name.
+        proxy (dict): Requires advance configuration, see notes below.
+
+    Returns:
+        Returns a str with kaggle dataset's latest version release date. 
+
+    Notes: 
+        Proxy: https://docs.python-requests.org/en/master/user/advanced/#proxies
+        Function assumes latest date shown on webpage is the version's last update date.
+    
+    '''
     metadataURL = r'https://www.kaggle.com/' + dataOwner + r'/' + dataName + r'/metadata'
     headers = {"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36"}
     pageRequest = requests.get(metadataURL, proxies=proxy, headers=headers)

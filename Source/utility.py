@@ -1,24 +1,63 @@
 #!/user/bin/python3.9.1
 import os
 
-#Note, key authentication exists natively in kaggle module. 
-def kaggleTokenExistence(mainStorageDrive: str='C:\\') -> bool: 
-    normalAPILocation = os.path.join(mainStorageDrive, 'Users', os.getlogin(), '.kaggle')
-    kaggleToken = r'kaggle.json'
-    if os.path.exists(os.path.join(normalAPILocation, kaggleToken)):
-        return True
-    else:
-        return False
-    
-def removeByFileExtension(extension:str, directory:str):
-    extractedFiles = os.listdir(directory)
-    for file in extractedFiles:
-        if file[-len(extension):] == extension:
-            os.unlink(os.path.join(directory, file)) 
+def byteUnitConverter(sizeInBytes:int, roundDec:int=2) -> str: 
+    '''Converts bytes integer to larger bytes-unit string.
 
-def extractURLData(url:str) -> tuple: #Pulls author and dataset name from kaggle URL. 
-    datasetName = []
-    datasetAuthor = []
+    Args:
+        sizeInBytes(int): The integer amount of bytes to re-label.
+        roundDec(int): Decimal place to round numbers to.
+
+    Returns:
+        Small string with appropriate byte-unit label. 
+
+    Examples: 
+        190 -> '190 bytes'
+        1898721 -> '1.9 MBs'
+        9999999999999 -> '10.0 TBs'
+    
+    '''
+    unitsDict = {'B':1, 'KBs':3, 'MBs':6, 'GBs':9, 'TBs':12, 'PBs':15, 'EBs':18}
+    for i in enumerate(unitsDict):
+        exponent = unitsDict.get(i[1])
+        if abs(sizeInBytes) < 1000:
+            return str(sizeInBytes) + ' bytes'
+        elif i[0]!=0 and abs(sizeInBytes)<10**(exponent+3):
+            #Note, for a better solution change (exponent+3) to the 
+            #value pair from the ith+1 iteration. 3 was used for simplicity.
+            return str(round(sizeInBytes/10**exponent,roundDec)) + ' ' + i[1]
+
+def folderSizeAmount(absFolderPath:str):
+    '''Finds byte size of specific folder by walking file tree.
+
+    Args:
+        absFolderPath (str): Absolute file path to directory.
+
+    Returns:
+        Integer value of designated directory in bytes.
+
+    '''
+    totalSize = 0
+    for folderName, _, fileList in os.walk(absFolderPath):
+        os.chdir(folderName)
+        for file in fileList: 
+            individalFilePath = os.path.abspath(file)
+            totalSize += os.path.getsize(individalFilePath)
+    return totalSize
+
+def extractURLData(url:str) -> tuple: 
+    '''Retrieves kaggle dataset author and name from kaggle URL string.
+
+    Args:
+        url (str): Kaggle URL of the following format:
+        https://www.kaggle.com/<author>/<datasetname> 
+
+    Returns:
+        Tuple of strings where: 
+        (Kaggle dataset's Name, Kaggle dataset's Author) 
+    
+    '''
+    datasetName = datasetAuthor = []
     #URL formatted as: www.kaggle.com/<datasetAuthor>/<datasetName>
     for i in reversed(url):
         if i != r'/':
@@ -48,26 +87,21 @@ def elapsedTimeCalculator(startTime:float, endTime:float, decRound:int=2) -> str
         return str(round(elapsedTimeMins,decRound)) + ' minutes'
     else: #Time as unit of seconds.
         return str(round(elapsedTimeSecs,decRound)) + ' seconds'
-
-def folderSizeAmount(absFolderPath:str):
-    totalSize = 0
-    for folderName, _, fileList in os.walk(absFolderPath):
-        os.chdir(folderName)
-        for file in fileList: 
-            individalFilePath = os.path.abspath(file)
-            totalSize += os.path.getsize(individalFilePath)
-    return totalSize
+  
+#Note, key authentication exists natively in kaggle module. 
+def kaggleTokenExistence(mainStorageDrive: str='C:\\') -> bool: 
+    normalAPILocation = os.path.join(mainStorageDrive, 'Users', os.getlogin(), '.kaggle')
+    kaggleToken = r'kaggle.json'
+    if os.path.exists(os.path.join(normalAPILocation, kaggleToken)):
+        return True
+    else:
+        return False
     
-def byteUnitConverter(sizeInBytes:int) -> str: 
-    unitsDict = {'B':1, 'KBs':3, 'MBs':6, 'GBs':9, 'TBs':12, 'PBs':15, 'EBs':18}
-    for i in enumerate(unitsDict):
-        exponent = unitsDict.get(i[1])
-        if abs(sizeInBytes) < 1000:
-            return str(sizeInBytes) + ' bytes'
-        elif i[0]!=0 and abs(sizeInBytes)<10**(exponent+3):
-            #Note, for a better solution change (exponent+3) to the 
-            #value pair from the NEXT ith iteration. 3 was used for simplicity.
-            return str(round(sizeInBytes/10**exponent,2)) + ' ' + i[1]
+def removeByFileExtension(extension:str, directory:str):
+    extractedFiles = os.listdir(directory)
+    for file in extractedFiles:
+        if file[-len(extension):] == extension:
+            os.unlink(os.path.join(directory, file)) 
 
 if __name__ == '__main__':
     pass

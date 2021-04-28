@@ -27,7 +27,7 @@ def byteUnitConverter(sizeInBytes:int, roundDec:int=2) -> str:
             #value pair from the ith+1 iteration. 3 was used for simplicity.
             return str(round(sizeInBytes/10**exponent,roundDec)) + ' ' + i[1]
 
-def folderSizeAmount(absFolderPath:str):
+def folderSizeAmount(absFolderPath:str) -> int:
     '''Finds byte size of specific folder by walking file tree.
 
     Args:
@@ -58,7 +58,6 @@ def extractURLData(url:str) -> tuple:
     
     '''
     datasetName = datasetAuthor = []
-    #URL formatted as: www.kaggle.com/<datasetAuthor>/<datasetName>
     for i in reversed(url):
         if i != r'/':
             datasetName.append(i)
@@ -75,6 +74,8 @@ def extractURLData(url:str) -> tuple:
     return datasetNameString, datasetAuthorString
 
 def elapsedTimeCalculator(startTime:float, endTime:float, decRound:int=2) -> str:
+    
+    
     elapsedTimeSecs = endTime - startTime
     elapsedTimeMins = elapsedTimeSecs/60
     elapsedTimeHours = elapsedTimeMins/60
@@ -89,15 +90,33 @@ def elapsedTimeCalculator(startTime:float, endTime:float, decRound:int=2) -> str
         return str(round(elapsedTimeSecs,decRound)) + ' seconds'
   
 #Note, key authentication exists natively in kaggle module. 
-def kaggleTokenExistence(mainStorageDrive: str='C:\\') -> bool: 
+def kaggleTokenExistence(mainStorageDrive: str='C:\\') -> bool:
+    '''Checks for kaggle API token based on standard download configs.
+
+    Args:
+        mainStorageDrive (str): Main drive where user's 
+
+    Returns:
+        Tuple of strings where: 
+        (Kaggle dataset's Name, Kaggle dataset's Author) 
+    
+    '''
     normalAPILocation = os.path.join(mainStorageDrive, 'Users', os.getlogin(), '.kaggle')
     kaggleToken = r'kaggle.json'
     if os.path.exists(os.path.join(normalAPILocation, kaggleToken)):
         return True
     else:
         return False
-    
-def removeByFileExtension(extension:str, directory:str):
+
+#Note, kaggle API & module allows for individual file type downloads.
+def removeByFileExtension(extension:str, directory:str) -> None:
+    '''Removes files in specifed directory based off file extension.
+
+    Args:
+        extension (str): Extension type to remove files by. (e.g. '.json')
+        directory (str): Absolute file path to directory containing files.
+
+    '''
     extractedFiles = os.listdir(directory)
     for file in extractedFiles:
         if file[-len(extension):] == extension:

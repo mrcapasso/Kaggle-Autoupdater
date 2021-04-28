@@ -52,7 +52,8 @@ def main():
     dateSpecificLogFile = os.path.join(absPathForLogDir,f"{currentDate}.log") #1 New / temp
     #Bug fix for inability to find log file? 
     if os.path.isfile(dateSpecificLogFile) == False: #! New / temp
-        logFileToCrete = os.path.join(absPathForLogDir, dateSpecificLogFile) #! New / temp
+        logFileToCreate = os.path.join(absPathForLogDir, dateSpecificLogFile) #! New / temp
+        open(logFileToCreate, "x")
     #fh = logging.FileHandler(os.path.join('Logs',f"{currentDate}.log")) #previous 'working'
     fh = logging.FileHandler(dateSpecificLogFile) #! New / temp
     fh.setLevel(logging.DEBUG)

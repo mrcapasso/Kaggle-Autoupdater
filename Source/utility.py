@@ -65,7 +65,8 @@ def extractURLData(url:str) -> tuple:
         (Kaggle dataset's Name, Kaggle dataset's Author) 
     
     '''
-    datasetName = datasetAuthor = []
+    datasetName = []
+    datasetAuthor = []
     for i in reversed(url):
         if i != r'/':
             datasetName.append(i)

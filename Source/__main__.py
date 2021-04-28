@@ -1,5 +1,3 @@
-#!/user/bin/python3.9.1
-
 #     License Type: GNU General Public License v3.0
 #     'Kaggle Autoupdater', automated file version control for Kaggle.
 #     Copyright (C) 2021 Matteo Capasso (matteo@capasso.dev)
@@ -50,7 +48,13 @@ def main():
     
     #File Specific Logging Configurations
     currentDate = f"{time.strftime('%Y-%m-%d')}"
-    fh = logging.FileHandler(os.path.join('Logs',f"{currentDate}.log"))
+    absPathForLogDir = os.path.abspath('Logs')
+    dateSpecificLogFile = os.path.join(absPathForLogDir,f"{currentDate}.log") #1 New / temp
+    #Bug fix for inability to find log file? 
+    if os.path.isfile(dateSpecificLogFile) == False: #! New / temp
+        logFileToCrete = os.path.join(absPathForLogDir, dateSpecificLogFile) #! New / temp
+    #fh = logging.FileHandler(os.path.join('Logs',f"{currentDate}.log")) #previous 'working'
+    fh = logging.FileHandler(dateSpecificLogFile) #! New / temp
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
     logger.addHandler(fh)

@@ -1,0 +1,17 @@
+goodreadsbooks Source Information
+
+URL: https://www.kaggle.com/jealousleopard/goodreadsbooks/metadata
+
+License: CC0: Public Domain
+
+Visibility: Public
+
+Sources: Goodreads API
+
+Dataset owner: Soumik
+
+Last updated: 2020-03-09
+
+Date created: 2019-06-14
+
+Current version: Version 2

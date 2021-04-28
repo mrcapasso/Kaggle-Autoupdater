@@ -1,0 +1,17 @@
+Netflix-Shows Source Information: 
+
+URL: https://www.kaggle.com/shivamb/netflix-shows/metadata
+
+License: CC0: Public Domain
+
+Visibility: Public
+
+Sources: https://flixable.com/
+
+Dataset owner: Shivam Bansal
+
+Last updated: 2021-01-18
+
+Date created: 2019-12-04
+
+Current version: Version 4

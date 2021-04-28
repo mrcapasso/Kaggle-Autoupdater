@@ -12,12 +12,11 @@ __pycache__
 *.tar
 *.zip
 *.mp*
-*.txt
 
 #Demo Documents
-!Archive/netflix-shows/2021-04-05/*.csv
+!Archive/netflix-shows/2021-04-05/*
 #####Source: https://www.kaggle.com/shivamb/netflix-shows
-!Archive/goodreadsbooks/2020-08-04/*.csv
+!Archive/goodreadsbooks/2020-08-04/*
 ####Source: https://www.kaggle.com/jealousleopard/goodreadsbooks
 !demo.log
 !*.URL

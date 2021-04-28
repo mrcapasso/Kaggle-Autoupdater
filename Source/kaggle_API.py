@@ -156,4 +156,4 @@ def kaggleRecentVersionDate(dataOwner: str, dataName: str, proxy:dict='') -> str
     return recentDate
 
 if __name__ == '__main__':
-    pass
+    raise AssertionError('Missguided call -- this is not the main function.')

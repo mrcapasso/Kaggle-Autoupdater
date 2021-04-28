@@ -123,4 +123,4 @@ def removeByFileExtension(extension:str, directory:str) -> None:
             os.unlink(os.path.join(directory, file)) 
 
 if __name__ == '__main__':
-    pass
+    raise AssertionError('Missguided call -- this is not the main function.')

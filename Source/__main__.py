@@ -11,7 +11,7 @@ def main():
             'https://www.kaggle.com/jealousleopard/goodreadsbooks', 
             'https://www.kaggle.com/shivamb/netflix-shows'
             ]
-        #URL Format (required): https://www.kaggle.com/<author>/<datasetname>
+        #URL Format (REQUIRED): https://www.kaggle.com/<author>/<datasetname>
     KAGGLE_DATASETS_LOCATION = r'Archive'
         #Relative or absolute file paths accepted.
     UNZIP_DATASETS = True
@@ -53,7 +53,7 @@ def main():
     startSize = folderSizeAmount(KAGGLE_DATASETS_LOCATION)
     logger.info('#'*23 + f"(Program Start (Date: {currentDate}))" + '#'*23)
 
-    #Converting config's URL list to convenient datastructure.
+    #Parsing config's URL list to list of dataset names and authors.
     try:
         trackedDatasets = []
         for i in KAGGLE_DATASETS_URL_LIST:
@@ -71,7 +71,7 @@ def main():
         logger.debug(f"Initiating process: {datasetName}/{datasetAuthor}")
 
         try: #Checking online version's latest date.
-            #Note: Date naming convention is YYYY-MM-DD
+            #Note: Date naming convention is YYYY-MM-DD.
             kaggleOnlineVersion = kaggleRecentVersionDate(datasetAuthor,datasetName)
             onlineDate = int(kaggleOnlineVersion.replace('-',''))
             todaysDate = int(time.strftime("%Y%m%d"))
@@ -92,11 +92,10 @@ def main():
         try: #Checking offline version's latest date.
             kaggleOfflineVersion = -1
             individualDatasetPath = os.path.join(KAGGLE_DATASETS_LOCATION,datasetName)
-            #Case if dataset folder exists, but is empty.
-            if os.listdir(KAGGLE_DATASETS_LOCATION) == []:
+            if os.listdir(KAGGLE_DATASETS_LOCATION) == []: #Existent, but empty, folder.
                 logger.info(f"New dataset: {datasetName}/{datasetAuthor}")
             elif len(os.listdir(individualDatasetPath)) != 0: #Comparing sub-folder dates.
-                #Note: Date naming convention is YYYY-MM-DD
+                #Note: Directory subfolder naming convention is YYYY-MM-DD.
                 kaggleOfflineVersion = max(set(os.listdir(individualDatasetPath)))
         except:
             logger.critical(f"Problem: {sys.exc_info()[1]}")

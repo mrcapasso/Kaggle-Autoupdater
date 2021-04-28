@@ -3,6 +3,13 @@
     #* API Token Link: https://www.kaggle.com/docs/api#authentication
     #* Kaggle Module Installation: 'pip install kaggle'
     #* Kaggle Module Documentation: https://github.com/Kaggle/kaggle-api
+    
+#     License Type: GNU General Public License v3.0
+#     'Kaggle Autoupdater', automated file version control for Kaggle.
+#     Copyright (C) 2021 Matteo Capasso (matteo@capasso.dev)
+
+#     You should have received a copy of the GNU General Public License
+#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import kaggle, os, re, requests
 

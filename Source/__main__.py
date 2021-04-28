@@ -156,4 +156,17 @@ def main():
 
 if __name__ == '__main__':
     os.system('cls')
+    print('''
+
+        Kaggle Autoupdater Copyright (C) 2021 Matteo Capasso
+        This program comes with ABSOLUTELY NO WARRANT.
+        This is free software, and you are welcome to redistribute it
+        under certain conditions. See source files for details.
+        
+        ''')
+    sleepTime = 5
+    for i in range(sleepTime):
+        print(f"Sleeping {sleepTime-i} seconds...")
+        time.sleep(1)
+    os.system('cls')
     main()

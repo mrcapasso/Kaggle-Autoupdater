@@ -163,13 +163,13 @@ def main():
 if __name__ == '__main__':
     os.system('cls')
     if approxProgramRuns() <= 2:
-        sleepTime = 16
+        sleepTime = 20
         for i in range(sleepTime):
             if i%5 == True:
                 os.system('cls')
                 print(licenseDisplay())
-                print('(Note: This text will dissappear'
-                + ' after a few program runs.)' + "\n")
+                print('*Note: This license notification will'
+                + ' dissappear after a few program runs.*' + "\n")
                 print(f"Sleeping {sleepTime-i} seconds...")
             time.sleep(1)
     os.system('cls')

@@ -163,25 +163,15 @@ if __name__ == '__main__':
     os.system('cls')
     print('''
 
-        REQUIRMENTS -- Kaggle Autoupdater: 
-            1) Kaggle Module Downloaded 
-                Command: pip install Kaggle
-            2) Valid Kaggle API Token
-                URL: https://www.kaggle.com/docs/api#authentication
-
         Kaggle Autoupdater Copyright (C) 2021 Matteo Capasso
         This program comes with ABSOLUTELY NO WARRANT.
         This is free software, and you are welcome to redistribute it
         under certain conditions. See source files for details.
         
-        (This message will dissappear after a few runs of the progam.)
-
         ''')
-    sleepTime = 20
+    sleepTime = 5
     for i in range(sleepTime):
-        if i%2 == True:
-            print(f"Sleeping {sleepTime-i} seconds...")
+        print(f"Sleeping {sleepTime-i} seconds...")
         time.sleep(1)
     os.system('cls')
-    os.system('pause')
     main()

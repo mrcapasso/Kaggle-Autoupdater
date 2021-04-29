@@ -9,7 +9,6 @@ def requirementsDisplay() -> str:
 
     3) Valid Kaggle API Token (very quick setup)
        https://www.kaggle.com/docs/api#authentication
-
     '''
     return requirments
 
@@ -25,6 +24,16 @@ def licenseDisplay() -> str:
     '''
     return license
 
+def kaggleModuleAndTokenExistence() -> bool:
+    try: 
+        import kaggle
+        return True
+    except ModuleNotFoundError: #Happens with no module.
+        return False
+    except OSError: #Happens with invalid token.
+        return False
+
+#Note, same functionality included in the above function.
 def kaggleTokenExistence(drive: str='C:\\') -> bool:
     '''Checks for kaggle API token based on standard download configs.
 
@@ -41,13 +50,6 @@ def kaggleTokenExistence(drive: str='C:\\') -> bool:
     if os.path.exists(os.path.join(APILocation, kaggleToken)):
         return True
     else:
-        return False
-
-def kaggleModuleExistence() -> bool:
-    try: 
-        import kaggle
-        return True
-    except ModuleNotFoundError:
         return False
 
 def pythonVersionValidate(majorVersion:int, minorVersion:int, microVersion:int, moreRecent:bool=True) -> bool: 

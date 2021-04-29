@@ -1,3 +1,30 @@
+import os, sys
+
+def requirementsDisplay() -> str: 
+    requirments = '''
+    REQUIRMENTS -- Kaggle Autoupdater: 
+    1) Python3 v3.9.1 or greater.
+
+    2) Kaggle Module Installation 
+
+    3) Valid Kaggle API Token (very quick setup)
+       https://www.kaggle.com/docs/api#authentication
+
+    '''
+    return requirments
+
+def licenseDisplay() -> str: 
+    license = '''
+    Kaggle Autoupdater Copyright (C) 2021 Matteo Capasso
+    Email: matteo@capasso.dev
+
+    License: GNU General Public License v3.0
+    This program comes with ABSOLUTELY NO WARRANTY.
+    This is free software, and you are welcome to redistribute it
+    under certain conditions. See source files for details.
+    '''
+    return license
+
 def kaggleTokenExistence(drive: str='C:\\') -> bool:
     '''Checks for kaggle API token based on standard download configs.
 
@@ -9,9 +36,50 @@ def kaggleTokenExistence(drive: str='C:\\') -> bool:
         (Kaggle dataset's Name, Kaggle dataset's Author) 
     
     '''
-    normalAPILocation = os.path.join(drive, 'Users', os.getlogin(), '.kaggle')
+    APILocation = os.path.join(drive, 'Users', os.getlogin(), '.kaggle')
     kaggleToken = r'kaggle.json'
-    if os.path.exists(os.path.join(drive, kaggleToken)):
+    if os.path.exists(os.path.join(APILocation, kaggleToken)):
         return True
     else:
         return False
+
+def kaggleModuleExistence() -> bool:
+    try: 
+        import kaggle
+        return True
+    except ModuleNotFoundError:
+        return False
+
+def pythonVersionValidate(majorVersion:int, minorVersion:int, microVersion:int, moreRecent:bool=True) -> bool: 
+    #E.g.: Python version 3.9.1 means: major=3, minor=9, micro=1
+    #sys.version_info(major=3, minor=9, micro=1, releaselevel='final', serial=0)
+    #moreRecent (bool): Accept versions coming after the required version.
+    downloadedVersion = sys.version_info
+    if moreRecent == True:
+        if downloadedVersion[0] < majorVersion:
+            return False
+        if downloadedVersion[1] < minorVersion:
+            return False
+        if downloadedVersion[2] < microVersion:
+            return False
+        return True
+    else: 
+        if downloadedVersion[0] != majorVersion:
+            return False
+        if downloadedVersion[1] != minorVersion:
+            return False
+        if downloadedVersion[2] != microVersion:
+            return False
+        return True
+
+def approxProgramRuns() -> int:
+    logPath = os.path.abspath('Logs')
+    if os.path.isdir(logPath) == True:
+        logDir = os.listdir(logPath)
+        demoFiles = 1
+        return len(logDir) - demoFiles
+    else:
+        raise AssertionError('No log directory found.')
+
+if __name__ == '__main__':
+    pass

@@ -1,10 +1,12 @@
-import os, sys, time
-from Source\precheck.py import *
+import os
+from Source.precheck import 
+from Source.__main__ import *
 
 pythonMajorVersion = a = 3
 pythonMinorVersion = b = 9
 pythonMicroVersion = c = 1
 pythonVersion = f"{a}.{b}.{c}"
+
 
 os.system('cls')
 try:

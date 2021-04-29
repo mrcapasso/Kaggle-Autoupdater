@@ -17,6 +17,7 @@
 #     If not, see <https://www.gnu.org/licenses/>.
 
 import os, sys, logging, time, csv
+from precheck import approxProgramRuns, licenseDisplay
 from kaggle_API import kaggleDownloadCmd, kaggleRecentVersionDate
 from utility import elapsedTimeCalculator, extractURLData, folderSizeAmount, byteUnitConverter
         
@@ -161,17 +162,15 @@ def main():
 
 if __name__ == '__main__':
     os.system('cls')
-    print('''
-
-        Kaggle Autoupdater Copyright (C) 2021 Matteo Capasso
-        This program comes with ABSOLUTELY NO WARRANT.
-        This is free software, and you are welcome to redistribute it
-        under certain conditions. See source files for details.
-        
-        ''')
-    sleepTime = 5
-    for i in range(sleepTime):
-        print(f"Sleeping {sleepTime-i} seconds...")
-        time.sleep(1)
+    if approxProgramRuns() <= 2:
+        sleepTime = 20
+        for i in range(sleepTime):
+            if i%5 == True:
+                os.system('cls')
+                print(licenseDisplay())
+                print('*Note: This license notification will'
+                + ' dissappear after a few program runs.*' + "\n")
+                print(f"Sleeping {sleepTime-i} seconds...")
+            time.sleep(1)
     os.system('cls')
     main()

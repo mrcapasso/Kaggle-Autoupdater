@@ -97,25 +97,6 @@ def elapsedTimeCalculator(startTime:float, endTime:float, decRound:int=2) -> str
         return str(round(elapsedTimeMins,decRound)) + ' minutes'
     else: #Time as unit of seconds.
         return str(round(elapsedTimeSecs,decRound)) + ' seconds'
-  
-#Note, key authentication exists natively in kaggle module. 
-def kaggleTokenExistence(mainStorageDrive: str='C:\\') -> bool:
-    '''Checks for kaggle API token based on standard download configs.
-
-    Args:
-        mainStorageDrive (str): Main drive where user's 
-
-    Returns:
-        Tuple of strings where: 
-        (Kaggle dataset's Name, Kaggle dataset's Author) 
-    
-    '''
-    normalAPILocation = os.path.join(mainStorageDrive, 'Users', os.getlogin(), '.kaggle')
-    kaggleToken = r'kaggle.json'
-    if os.path.exists(os.path.join(normalAPILocation, kaggleToken)):
-        return True
-    else:
-        return False
 
 #Note, kaggle API & module allows for individual file type downloads.
 def removeByFileExtension(extension:str, directory:str) -> None:

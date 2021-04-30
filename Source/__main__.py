@@ -16,7 +16,7 @@
 #     along with this program in the parent folder.
 #     If not, see <https://www.gnu.org/licenses/>.
 
-import os, sys, logging, time, csv
+import os, sys, logging, time
 from precheck import approxProgramRuns, licenseDisplay
 from kaggle_API import kaggleDownloadCmd, kaggleRecentVersionDate
 from utility import elapsedTimeCalculator, extractURLData, folderSizeAmount, byteUnitConverter
@@ -49,14 +49,8 @@ def main():
     
     #File Specific Logging Configurations
     currentDate = f"{time.strftime('%Y-%m-%d')}"
-    absPathForLogDir = os.path.abspath('Logs')
-    dateSpecificLogFile = os.path.join(absPathForLogDir,f"{currentDate}.log") #1 New / temp
-    #Bug fix for inability to find log file? 
-    if os.path.isfile(dateSpecificLogFile) == False: #! New / temp
-        logFileToCreate = os.path.join(absPathForLogDir, dateSpecificLogFile) #! New / temp
-        open(logFileToCreate, "x")
-    #fh = logging.FileHandler(os.path.join('Logs',f"{currentDate}.log")) #previous 'working'
-    fh = logging.FileHandler(dateSpecificLogFile) #! New / temp
+    logFileAbsFilePath = os.path.join(os.getcwd(),'Logs', f"{currentDate}.log")
+    fh = logging.FileHandler(logFileAbsFilePath)
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
     logger.addHandler(fh)
@@ -161,9 +155,10 @@ def main():
 
 
 if __name__ == '__main__':
+    os.chdir(os.path.dirname(os.path.dirname(__file__)))
     os.system('cls')
     if approxProgramRuns() <= 2:
-        sleepTime = 20
+        sleepTime = 16
         for i in range(sleepTime):
             if i%5 == True:
                 os.system('cls')
@@ -172,5 +167,6 @@ if __name__ == '__main__':
                 + ' dissappear after a few program runs.*' + "\n")
                 print(f"Sleeping {sleepTime-i} seconds...")
             time.sleep(1)
+    del(sleepTime)
     os.system('cls')
     main()

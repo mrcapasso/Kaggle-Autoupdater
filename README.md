@@ -1,11 +1,10 @@
 ## Kaggle Autoupdater
 
-<br>
 
 ### Abstract:
 
 An archiving program to download new Kaggle dataset versions
-once they are released -- done via Kaggle API and Kaggle python module. <br>Logging to file is included, and so are optional download status updates via console. Demo documents are provided for understanding.
+once they are released -- done via Kaggle API and Kaggle python module. Logging to file is included, and so are optional download status updates via console. Demo documents are provided for understanding.
 <br><br>
 
 _Note: Only tested for windows at this time._

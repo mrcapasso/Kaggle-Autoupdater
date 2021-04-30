@@ -139,7 +139,7 @@ def main():
         #Sleeping to prevent API spam.
         timerPosition += 1
         if timerPosition < len(trackedDatasets):
-            logger.debug(f"Sleeping: {SLEEP_TIME} seconds.")
+            logger.info(f"Sleeping: {SLEEP_TIME} seconds.")
             time.sleep(SLEEP_TIME)
     #######################(Version Control & Updating - End)#######################
 
@@ -151,6 +151,8 @@ def main():
     logger.info('#'*24 + f"(Program End (Date: {currentDate}))" + '#'*24)
     logger.info(f"Elapsed time: {elapsedTimeCalculator(startTime,endTime)}")
     logger.info(f"Added data: {byteUnitConverter(sizeDifference)}")
+    if CONSOLE_TEXT_OUTPUT == True:
+        os.system('pause')
     #############################(Postprocessing - End)#############################
 
 

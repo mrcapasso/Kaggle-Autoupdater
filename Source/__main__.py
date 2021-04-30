@@ -151,6 +151,8 @@ def main():
     logger.info('#'*24 + f"(Program End (Date: {currentDate}))" + '#'*24)
     logger.info(f"Elapsed time: {elapsedTimeCalculator(startTime,endTime)}")
     logger.info(f"Added data: {byteUnitConverter(sizeDifference)}")
+    if CONSOLE_TEXT_OUTPUT == True:
+        os.system('pause')
     #############################(Postprocessing - End)#############################
 
 

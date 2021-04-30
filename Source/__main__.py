@@ -1,3 +1,5 @@
+#!/user/bin/python3.9.1
+
 #     License Type: GNU General Public License v3.0
 #     'Kaggle Autoupdater', automated file version control for Kaggle.
 #     Copyright (C) 2021 Matteo Capasso (matteo@capasso.dev)

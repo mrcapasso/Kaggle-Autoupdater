@@ -1,9 +1,16 @@
+#     License Type: GNU General Public License v3.0
+#     'Kaggle Autoupdater', automated file version control for Kaggle.
+#     Copyright (C) 2021 Matteo Capasso (matteo@capasso.dev)
+
+#     You should have received a copy of the GNU General Public License
+#     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import os, sys
 
-def requirementsDisplay() -> str: 
-    requirments = '''
+def requirementsDisplay(pythonVersion:str) -> str: 
+    requirments = f'''
     REQUIRMENTS -- Kaggle Autoupdater: 
-    1) Python3 v3.9.1 or greater.
+    1) Python3 v{pythonVersion} or greater.
 
     2) Kaggle Module Installation 
 
@@ -84,4 +91,4 @@ def approxProgramRuns() -> int:
         raise AssertionError('No log directory found.')
 
 if __name__ == '__main__':
-    pass
+    raise AssertionError('Missguided call -- this is not the main function.')

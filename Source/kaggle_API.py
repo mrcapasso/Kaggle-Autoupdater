@@ -1,4 +1,3 @@
-#!/user/bin/python3.9.1
 #* Note: These function require a valid Kaggle API token and kaggle module.  
     #* API Token Link: https://www.kaggle.com/docs/api#authentication
     #* Kaggle Module Installation: 'pip install kaggle'

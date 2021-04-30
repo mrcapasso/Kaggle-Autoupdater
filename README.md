@@ -9,20 +9,28 @@ once they are released -- done via Kaggle API and Kaggle module.
 
 2. Kaggle Module 
     GitHub Documentation: https://github.com/Kaggle/kaggle-api
+
     Kaggle Documentation: https://www.kaggle.com/docs/api
+
     ```pip install Kaggle```
 
+
 3. Valid Kaggle API Token (very easy installation)
+
     Setup: https://www.kaggle.com/docs/api#authentication
 
+
 4. Requests and Regex Module
+
     Note: These are temporary, they will not be required
     once Kaggle fixes metadata retrival issues. 
 
     Requests PyPi Docs: https://pypi.org/project/requests/
+    
     ```pip install requests```
 
     Regex PyPi Docs: https://pypi.org/project/regex/
+
     ```pip install regex```
 
 ###Run Guide

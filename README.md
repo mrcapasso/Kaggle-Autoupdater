@@ -1,6 +1,5 @@
 ## Kaggle Autoupdater
 
-<br>
 
 ### Abstract:
 

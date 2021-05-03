@@ -32,6 +32,11 @@ def licenseDisplay() -> str:
     return license
 
 def kaggleModuleAndTokenExistence() -> bool:
+    '''Checks for proper installation of kaggle python module and kaggle API token.
+
+    Returns:
+        bool representative of a proper module and API token installation.
+    '''
     try: 
         import kaggle
         return True
@@ -60,9 +65,22 @@ def kaggleTokenExistence(drive: str='C:\\') -> bool:
         return False
 
 def pythonVersionValidate(majorVersion:int, minorVersion:int, microVersion:int, moreRecent:bool=True) -> bool: 
-    #E.g.: Python version 3.9.1 means: major=3, minor=9, micro=1
-    #sys.version_info(major=3, minor=9, micro=1, releaselevel='final', serial=0)
-    #moreRecent (bool): Accept versions coming after the required version.
+    '''Compares installed python interpreter version with user provided interpreter version. 
+    
+    Note: 
+        Python versions are labeled as suchs: majorVersion.minorVersion.microVersion
+        (E.g. Python3 v3.9.1 would correspond to majorVersion=3, minorVersion=9, microVersion=1)
+
+    Args:
+        majorVersion (int): The major version of the user provided Python interpreter.
+        minorVersion (int): The minor version of the user provided Python interpreter.
+        microVersion (int): The micro version of the user provided Python interpreter.
+        moreRecent (bool): Designate versions coming after the parameter's version as compatible.
+
+    Returns:
+        A bool representing if the installed interpreter and the user provider interpreter are compatible.
+
+    '''
     downloadedVersion = sys.version_info
     if moreRecent == True:
         if downloadedVersion[0] < majorVersion:
@@ -81,14 +99,22 @@ def pythonVersionValidate(majorVersion:int, minorVersion:int, microVersion:int, 
             return False
         return True
 
-def approxProgramRuns() -> int:
-    logPath = os.path.abspath('Logs')
-    if os.path.isdir(logPath) == True:
-        logDir = os.listdir(logPath)
-        demoFiles = 1
-        return len(logDir) - demoFiles
+def approxProgramRuns(folderName:str, excludedFilesAmt:int) -> int:
+    '''Approxmiates amount of program runs by counting files in given folder.
+
+    Args:
+        excludedFiles (int): The amount of files to exclude from the approxmiation.
+
+    Returns:
+        An int approximating the amount of program runs.
+
+    '''
+    folderPath = os.path.abspath(folderName)
+    if os.path.isdir(folderPath) == True:
+        folderDir = os.listdir(folderPath)
+        return len(folderDir) - excludedFilesAmt
     else:
-        raise AssertionError('No log directory found.')
+        raise AssertionError(f"Folder ({folderName}) not found.")
 
 if __name__ == '__main__':
     raise AssertionError('Missguided call -- this is not the main function.')

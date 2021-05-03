@@ -161,7 +161,7 @@ def main():
 if __name__ == '__main__':
     os.chdir(os.path.dirname(os.path.dirname(__file__)))
     os.system('cls')
-    if approxProgramRuns() <= 2:
+    if approxProgramRuns(folderName='Logs', excludedFilesAmt=1) <= 2:
         sleepTime = 16
         for i in range(sleepTime):
             if i%5 == True:

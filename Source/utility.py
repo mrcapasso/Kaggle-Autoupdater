@@ -81,8 +81,23 @@ def extractURLData(url:str) -> tuple:
     return datasetNameString, datasetAuthorString
 
 def elapsedTimeCalculator(startTime:float, endTime:float, decRound:int=2) -> str:
+    '''Elapsed time calculator for use with python's 'time' module.
+
+    Args:
+        startTime(float): Starting time for measurment.
+        endTime(float): Ending time for measurment. 
+        decRound(int): Decimal place to round time's float value to.
+
+    Returns:
+        A string representing the amount of passed time, includes time unit label.
+
+    Example:
+        startProgramTime = time.time()
+        main()
+        endProgramTime = time.time()
+        print(elapsedTimeCalculator(startProgramTime, endProgramTime))
     
-    
+    '''
     elapsedTimeSecs = endTime - startTime
     elapsedTimeMins = elapsedTimeSecs/60
     elapsedTimeHours = elapsedTimeMins/60
